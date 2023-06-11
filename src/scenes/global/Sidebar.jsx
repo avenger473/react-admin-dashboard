@@ -17,7 +17,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -141,7 +141,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Create Job"
+              title="Invoices"
               to="/invoices"
               icon={<WorkOutlineOutlinedIcon />}
               selected={selected}
@@ -155,7 +155,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Settings"
+              title="Create Job"
               to="/form"
               icon={<MapOutlinedIcon />}
               selected={selected}

@@ -1,5 +1,119 @@
 import { tokens } from "../theme";
 
+export const mockDataInterviews = [
+  {
+    id: 1,
+    name: "Jon Snow",
+    email: "jonsnow@gmail.com",
+    interview_details: {
+      location: "Bangalore",
+      position: "SDE 1",
+      date: "11-06-2023",
+      start_time: "11:00pm",
+      end_time: "12:00pm",
+    },
+    scorecard_url: "https://api.dashboard/score_card/1",
+    resume_url: "https://api.dashboard/resume/1",
+    comment: "Layed off Candidate",
+  },
+  {
+    id: 2,
+    name: "Arya Stark",
+    email: "aryastark@gmail.com",
+    interview_details: {
+      location: "New York",
+      position: "Software Engineer",
+      date: "15-06-2023",
+      start_time: "10:00am",
+      end_time: "11:30am",
+    },
+    scorecard_url: "https://api.dashboard/score_card/2",
+    resume_url: "https://api.dashboard/resume/2",
+    comment: "Impressive coding skills",
+  },
+  {
+    id: 3,
+    name: "Daenerys Targaryen",
+    email: "khaleesi@gmail.com",
+    interview_details: {
+      location: "London",
+      position: "Senior Data Scientist",
+      date: "18-06-2023",
+      start_time: "2:00pm",
+      end_time: "3:30pm",
+    },
+    scorecard_url: "https://api.dashboard/score_card/3",
+    resume_url: "https://api.dashboard/resume/3",
+    comment: "Excellent communication skills",
+  },
+  {
+    id: 4,
+    name: "Tyrion Lannister",
+    email: "tyrion@gmail.com",
+    interview_details: {
+      location: "San Francisco",
+      position: "Product Manager",
+      date: "20-06-2023",
+      start_time: "9:00am",
+      end_time: "10:30am",
+    },
+    scorecard_url: "https://api.dashboard/score_card/4",
+    resume_url: "https://api.dashboard/resume/4",
+    comment: "Strong leadership qualities",
+  },
+  {
+    id: 5,
+    name: "Sansa Stark",
+    email: "sansa@gmail.com",
+    interview_details: {
+      location: "Toronto",
+      position: "UX Designer",
+      date: "22-06-2023",
+      start_time: "11:00am",
+      end_time: "12:30pm",
+    },
+    scorecard_url: "https://api.dashboard/score_card/5",
+    resume_url: "https://api.dashboard/resume/5",
+    comment: "Creative design portfolio",
+  },
+  {
+    id: 6,
+    name: "Bran Stark",
+    email: "bran@gmail.com",
+    interview_details: {
+      location: "Sydney",
+      position: "Data Analyst",
+      date: "25-06-2023",
+      start_time: "3:00pm",
+      end_time: "4:30pm",
+    },
+    scorecard_url: "https://api.dashboard/score_card/6",
+    resume_url: "https://api.dashboard/resume/6",
+    comment: "Strong analytical skills",
+  },
+];
+
+export const mockDataApplicationReview = [
+  {
+    id: 1,
+    position: "HR Officer",
+    chatbot_screening: 1,
+    interview_screening: 5,
+  },
+  {
+    id: 2,
+    position: "Marketing Officer",
+    chatbot_screening: 2,
+    interview_screening: 0,
+  },
+  {
+    id: 3,
+    position: "IT Officer",
+    chatbot_screening: 3,
+    interview_screening: 1,
+  },
+];
+
 export const mockDataTeam = [
   {
     id: 1,

@@ -1,11 +1,24 @@
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  useTheme,
+} from "@mui/material";
+import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   const handleFormSubmit = (values) => {
     console.log(values);
@@ -13,8 +26,23 @@ const Form = () => {
 
   return (
     <Box m="20px">
-      <Header title="CREATE USER" subtitle="Create a New User Profile" />
-
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="CREATE JOB" subtitle="Create a New Job Profile" />
+        <Box>
+          <Button
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            }}
+          >
+            <UploadFileOutlinedIcon sx={{ mr: "10px" }} />
+            Import Job from CSV
+          </Button>
+        </Box>
+      </Box>
       <Formik
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -34,91 +62,125 @@ const Form = () => {
               gap="30px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
-                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                "& > div": { gridColumn: isNonMobile ? undefined : "span 3" },
               }}
             >
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="Job Title"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
+                value={values.jobTitle}
+                name="jobTitle"
+                error={!!touched.jobTitle && !!errors.jobTitle}
+                helperText={touched.jobTitle && errors.jobTitle}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
+                multiline
+                rows={4}
                 variant="filled"
                 type="text"
-                label="Last Name"
+                label="Job Description"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
+                name="jobDescription"
+                error={!!touched.jobDescription && !!errors.jobDescription}
+                helperText={touched.jobDescription && errors.jobDescription}
                 sx={{ gridColumn: "span 2" }}
               />
-              <TextField
-                fullWidth
+
+              <FormControl
                 variant="filled"
-                type="text"
-                label="Email"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.email}
-                name="email"
-                error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
+                sx={{ gridColumn: "span 2" }}
                 fullWidth
+                error={!!touched.educationField && !!errors.educationField}
+              >
+                <InputLabel id="education-field-label">
+                  Field of Education
+                </InputLabel>
+                <Select
+                  labelId="education-field-label"
+                  id="education-field"
+                  value={values.educationField}
+                  label="Field of Education"
+                  name="educationField"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <b>None</b>
+                  </MenuItem>
+                  {jobApplicationFieldsValues.map((field) => {
+                    return (
+                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
+              <FormControl
                 variant="filled"
-                type="text"
-                label="Contact Number"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
+                sx={{ gridColumn: "span 2" }}
                 fullWidth
+                error={!!touched.experience && !!errors.experience}
+              >
+                <InputLabel id="experience-label">
+                  Years of Education{" "}
+                </InputLabel>
+                <Select
+                  labelId="experience-label"
+                  id="experience"
+                  value={values.experience}
+                  label="Years of Education"
+                  name="experience"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <b>None</b>
+                  </MenuItem>
+                  {yearsOfExperienceValues.map((field) => {
+                    return (
+                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
+              <FormControl
                 variant="filled"
-                type="text"
-                label="Address 1"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address1}
-                name="address1"
-                error={!!touched.address1 && !!errors.address1}
-                helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
+                sx={{ gridColumn: "span 2" }}
                 fullWidth
-                variant="filled"
-                type="text"
-                label="Address 2"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={!!touched.address2 && !!errors.address2}
-                helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
-              />
+                error={!!touched.educationLevel && !!errors.educationLevel}
+              >
+                <InputLabel id="education-level-label">
+                  Education Level
+                </InputLabel>
+                <Select
+                  labelId="education-level-label"
+                  id="education-level"
+                  value={values.educationLevel}
+                  label="Education Level"
+                  name="educationLevel"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <b>None</b>
+                  </MenuItem>
+                  {educationLevelValues.map((field) => {
+                    return (
+                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                Create New Job
               </Button>
             </Box>
           </form>
@@ -128,27 +190,54 @@ const Form = () => {
   );
 };
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
 const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
-  address1: yup.string().required("required"),
-  address2: yup.string().required("required"),
+  jobTitle: yup.string().required("required"),
+  jobDescription: yup.string().required("required"),
+  skillsRequired: yup.array().required("required"),
+  experience: yup.string().required("required"),
+  educationLevel: yup.string().required("required"),
+  educationField: yup.string().required("required"),
 });
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  address1: "",
-  address2: "",
+  jobTitle: "",
+  jobDescription: "",
+  skillsRequired: [],
+  experience: "",
+  educationLevel: "",
+  educationField: "",
 };
+
+const jobApplicationFieldsValues = [
+  "Accounting",
+  "Administrative",
+  "Customer Service",
+  "Engineering",
+  "Finance",
+  "Human Resources",
+  "Information Technology",
+  "Marketing",
+  "Operations",
+  "Project Management",
+  "Sales",
+  "Software Development",
+];
+
+const yearsOfExperienceValues = [
+  "Less than 1 year",
+  "1-2 years",
+  "3-5 years",
+  "6-10 years",
+  "11-15 years",
+  "16-20 years",
+  "More than 20 years",
+];
+
+const educationLevelValues = [
+  "High School",
+  "Associate Degree",
+  "Bachelor's Degree",
+  "Master's Degree",
+  "Doctorate Degree",
+];
 
 export default Form;
