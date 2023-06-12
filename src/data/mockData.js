@@ -93,27 +93,6 @@ export const mockDataInterviews = [
   },
 ];
 
-export const mockDataApplicationReview = [
-  {
-    id: 1,
-    position: "HR Officer",
-    chatbot_screening: 1,
-    interview_screening: 5,
-  },
-  {
-    id: 2,
-    position: "Marketing Officer",
-    chatbot_screening: 2,
-    interview_screening: 0,
-  },
-  {
-    id: 3,
-    position: "IT Officer",
-    chatbot_screening: 3,
-    interview_screening: 1,
-  },
-];
-
 export const mockDataTeam = [
   {
     id: 1,
@@ -186,6 +165,69 @@ export const mockDataTeam = [
     age: 65,
     phone: "(444)555-6239",
     access: "admin",
+  },
+];
+
+export const mockDataApplications = [
+  {
+    id: 1,
+    position: "HR Officer",
+    status: "Ongoing",
+    total_cv: 35,
+    cv_screening: 10,
+    chatbot_screening: 5,
+    interview_screening: 5,
+    interviewed: 5,
+    hired: 5,
+    rejected: 5,
+  },
+  {
+    id: 2,
+    position: "Software Engineer",
+    status: "Completed",
+    total_cv: 50,
+    cv_screening: 15,
+    chatbot_screening: 10,
+    interview_screening: 10,
+    interviewed: 10,
+    hired: 5,
+    rejected: 20,
+  },
+  {
+    id: 3,
+    position: "Marketing Manager",
+    status: "Ongoing",
+    total_cv: 60,
+    cv_screening: 20,
+    chatbot_screening: 10,
+    interview_screening: 10,
+    interviewed: 5,
+    hired: 2,
+    rejected: 13,
+  },
+  {
+    id: 4,
+    position: "Sales Representative",
+    status: "Ongoing",
+    total_cv: 40,
+    cv_screening: 10,
+    chatbot_screening: 5,
+    interview_screening: 8,
+    interviewed: 7,
+    hired: 3,
+    rejected: 7,
+  },
+  {
+    id: 5,
+    position: "Graphic Designer",
+    status: "Ongoing",
+    total_cv: 25,
+    cv_screening: 8,
+    chatbot_screening: 4,
+    interview_screening: 6,
+    interviewed: 4,
+    hired: 2,
+    rejected: 7,
   },
 ];
 
