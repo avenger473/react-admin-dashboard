@@ -127,8 +127,8 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Activities"
-              to="/team"
+              title="Candidates"
+              to="/candidates"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -137,13 +137,6 @@ const Sidebar = () => {
               title="Calendar"
               to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Invoices"
-              to="/invoices"
-              icon={<WorkOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -157,7 +150,7 @@ const Sidebar = () => {
             <Item
               title="Create Job"
               to="/form"
-              icon={<MapOutlinedIcon />}
+              icon={<WorkOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -169,8 +162,11 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <SubMenu
-              label={<Typography>{"Charts"}</Typography>}
+              title={<Typography>Settings</Typography>}
               icon={<SettingsOutlinedIcon />}
+              style={{
+                color: colors.grey[100],
+              }}
             >
               <Item
                 title="Bar Chart"
