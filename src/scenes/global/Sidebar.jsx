@@ -149,15 +149,8 @@ const Sidebar = () => {
             />
             <Item
               title="Create Job"
-              to="/form"
+              to="/create_job"
               icon={<WorkOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -168,6 +161,20 @@ const Sidebar = () => {
                 color: colors.grey[100],
               }}
             >
+              <Item
+                title="General"
+                to="/general"
+                icon={<BarChartOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Billing"
+                to="/billing"
+                icon={<BarChartOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
               <Item
                 title="Bar Chart"
                 to="/bar"
@@ -193,6 +200,13 @@ const Sidebar = () => {
                 title="Geography Chart"
                 to="/geography"
                 icon={<MapOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="FAQ Page"
+                to="/faq"
+                icon={<HelpOutlineOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />

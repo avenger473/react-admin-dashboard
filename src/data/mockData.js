@@ -493,52 +493,39 @@ export const mockDataInvoices = [
 
 export const mockTransactions = [
   {
+    id: "1",
     txId: "01e4dsa",
-    user: "johndoe",
+    package: "Silver",
     date: "2021-09-01",
-    cost: "43.95",
+    amount: "43.95",
   },
   {
+    id: "2",
     txId: "0315dsaa",
-    user: "jackdower",
+    package: "Silver",
     date: "2022-04-01",
-    cost: "133.45",
+    amount: "133.45",
   },
   {
+    id: "3",
     txId: "01e4dsa",
-    user: "aberdohnny",
+    package: "Silver",
     date: "2021-09-01",
-    cost: "43.95",
+    amount: "43.95",
   },
   {
+    id: "4",
     txId: "51034szv",
-    user: "goodmanave",
+    package: "Silver",
     date: "2022-11-05",
-    cost: "200.95",
+    amount: "200.95",
   },
   {
-    txId: "0a123sb",
-    user: "stevebower",
-    date: "2022-11-02",
-    cost: "13.55",
-  },
-  {
-    txId: "01e4dsa",
-    user: "aberdohnny",
-    date: "2021-09-01",
-    cost: "43.95",
-  },
-  {
-    txId: "120s51a",
-    user: "wootzifer",
-    date: "2019-04-15",
-    cost: "24.20",
-  },
-  {
-    txId: "0315dsaa",
-    user: "jackdower",
+    id: "0310dsaa",
+    txId: "0310dsaa",
+    package: "Silver",
     date: "2022-04-01",
-    cost: "133.45",
+    amount: "133.45",
   },
 ];
 
