@@ -8,10 +8,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
-import BarChart from "../../components/BarChart";
-import StatBox from "../../components/StatBox";
-import ProgressCircle from "../../components/ProgressCircle";
+import PieChart from "../../components/PieChart";
+
 import Activities from "../activities";
 import ApplicationReview from "../application_review";
 
@@ -66,24 +64,14 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           p="30px"
         >
-          <Typography variant="h5" fontWeight="600">
-            Average Candidate Quality
-          </Typography>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            mt="25px"
-          >
-            <ProgressCircle size="125" />
-            <Typography
-              variant="h5"
-              color={colors.greenAccent[500]}
-              sx={{ mt: "15px" }}
-            >
-              $48,352 revenue generated
+          <Box height={"100%"}>
+            <Typography variant="h5" fontWeight="600">
+              Average Candidate Quality
             </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
+
+            <Box height={"100%"}>
+              <PieChart />
+            </Box>
           </Box>
         </Box>
 

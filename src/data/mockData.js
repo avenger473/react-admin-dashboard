@@ -614,19 +614,16 @@ export const mockPieData = [
     id: "average",
     label: "Average",
     value: 55,
-    color: "hsl(104, 70%, 50%)",
   },
   {
     id: "poor",
     label: "Poor",
     value: 15,
-    color: "hsl(162, 70%, 50%)",
   },
   {
     id: "good",
     label: "Good",
     value: 35,
-    color: "hsl(291, 70%, 50%)",
   },
 ];
 

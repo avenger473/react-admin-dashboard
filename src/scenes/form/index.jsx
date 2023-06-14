@@ -11,12 +11,11 @@ import {
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
 const Form = () => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+  // const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -60,10 +59,7 @@ const Form = () => {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-              sx={{
-                "& > div": { gridColumn: isNonMobile ? undefined : "span 3" },
-              }}
+              gridTemplateColumns="repeat(3, minmax(0, 1fr))"
             >
               <TextField
                 fullWidth
@@ -93,7 +89,6 @@ const Form = () => {
                 helperText={touched.jobDescription && errors.jobDescription}
                 sx={{ gridColumn: "span 2" }}
               />
-
               <FormControl
                 variant="filled"
                 sx={{ gridColumn: "span 2" }}
@@ -178,8 +173,13 @@ const Form = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
+            <Box display="flex" justifyContent="start" mt="40px">
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                size="large"
+              >
                 Create New Job
               </Button>
             </Box>
