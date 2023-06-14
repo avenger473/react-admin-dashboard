@@ -24,7 +24,6 @@ const Calendar = () => {
     const title = prompt("Please enter a new title for your event");
     const calendarApi = selected.view.calendar;
     calendarApi.unselect();
-
     if (title) {
       calendarApi.addEvent({
         id: `${selected.dateStr}-${title}`,
@@ -48,7 +47,7 @@ const Calendar = () => {
 
   return (
     <Box m="20px">
-      <Header title="Calendar" subtitle="Full Calendar Interactive Page" />
+      <Header title="MY CALENDAR" />
 
       <Box display="flex" justifyContent="space-between">
         {/* CALENDAR SIDEBAR */}
@@ -108,12 +107,16 @@ const Calendar = () => {
             dayMaxEvents={true}
             select={handleDateClick}
             eventClick={handleEventClick}
-            eventsSet={(events) => setCurrentEvents(events)}
+            eventsSet={(events) => {
+              console.log("events", events);
+              setCurrentEvents(events);
+            }}
             initialEvents={[
               {
                 id: "12315",
                 title: "All-day event",
-                date: "2022-09-14",
+                start: "1686700800000",
+                end: "1686787199000",
               },
               {
                 id: "5123",

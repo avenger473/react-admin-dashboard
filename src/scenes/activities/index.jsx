@@ -8,23 +8,34 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const options = [
-  "View CV",
-  "Download CV",
-  "View Scorecard",
-  "Download Scorecard",
-  "Edit",
-  "View Profile",
-];
-
-export function LongMenu() {
+const redirect = (url, target = "_blank") => window.open(url, target);
+const LongMenu = ({ resume_url, scorecard_url }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const options = [
+    {
+      label: "View CV",
+      action_cb: () => redirect(resume_url),
+    },
+    {
+      label: "View Scorecard",
+      action_cb: () => redirect(scorecard_url),
+    },
+    { label: "Edit", action_cb: () => console.log("Edit") },
+    { label: "View Profile", action_cb: () => console.log("View Profile") },
+  ];
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSelect = (option) => {
+    option.action_cb();
+    handleClose();
   };
 
   return (
@@ -54,41 +65,70 @@ export function LongMenu() {
         }}
       >
         {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === "Pyxis"}
-            onClick={handleClose}
-          >
-            {option}
+          <MenuItem key={option.label} onClick={(_) => handleSelect(option)}>
+            {option.label}
           </MenuItem>
         ))}
       </Menu>
     </div>
   );
-}
+};
 
 const Activities = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
     {
-      field: "tel",
+      field: "menu",
       headerName: "",
       flex: 0.2,
-      renderCell: () => {
-        return <LongMenu />;
+      renderCell: ({ row: { resume_url, scorecard_url } }) => {
+        return (
+          <LongMenu resume_url={resume_url} scorecard_url={scorecard_url} />
+        );
       },
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "applicant",
+      headerName: "Applicant",
       flex: 1,
-      cellClassName: "name-column--cell",
+      renderCell: ({ row: { name, email } }) => {
+        return (
+          <Box>
+            <Typography color={colors.grey[100]}>{name}</Typography>
+            <Typography color={colors.blueAccent[200]}>{email}</Typography>
+          </Box>
+        );
+      },
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "position",
+      headerName: "Position",
       flex: 1,
+      renderCell: ({ row: { interview_details } }) => {
+        return (
+          <Typography color={colors.grey[100]}>
+            {interview_details.position}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "interviewSchedule",
+      headerName: "Interview Date & Time",
+      flex: 1,
+      renderCell: ({ row: { interview_details } }) => {
+        return (
+          <Box>
+            <Typography color={colors.grey[100]}>
+              {interview_details.date}
+            </Typography>
+            <Typography color={colors.blueAccent[200]}>
+              {`${interview_details.start_time} - ${interview_details.end_time}`}
+            </Typography>
+          </Box>
+        );
+      },
     },
     {
       field: "location",

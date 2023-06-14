@@ -614,178 +614,157 @@ export const mockPieData = [
     id: "average",
     label: "Average",
     value: 55,
+    color: tokens("dark").redAccent[500],
   },
   {
     id: "poor",
     label: "Poor",
     value: 15,
+    color: tokens("dark").blueAccent[500],
   },
   {
     id: "good",
     label: "Good",
     value: 35,
+    color: tokens("dark").greenAccent[500],
   },
 ];
 
 export const mockLineData = [
   {
-    id: "japan",
-    color: tokens("dark").greenAccent[500],
+    id: "Rejected",
+    color: tokens("dark").redAccent[500],
     data: [
       {
-        x: "plane",
-        y: 101,
-      },
-      {
-        x: "helicopter",
-        y: 75,
-      },
-      {
-        x: "boat",
+        x: "05/06",
         y: 36,
       },
       {
-        x: "train",
+        x: "06/06",
         y: 216,
       },
       {
-        x: "subway",
+        x: "07/06",
         y: 35,
       },
       {
-        x: "bus",
+        x: "08/06",
         y: 236,
       },
       {
-        x: "car",
+        x: "09/06",
         y: 88,
       },
       {
-        x: "moto",
+        x: "10/06",
         y: 232,
       },
       {
-        x: "bicycle",
+        x: "11/06",
         y: 281,
       },
       {
-        x: "horse",
+        x: "12/06",
         y: 1,
       },
       {
-        x: "skateboard",
+        x: "13/06",
         y: 35,
       },
       {
-        x: "others",
+        x: "14/06",
         y: 14,
       },
     ],
   },
   {
-    id: "france",
-    color: tokens("dark").blueAccent[300],
+    id: "Hired",
+    color: tokens("dark").greenAccent[500],
     data: [
       {
-        x: "plane",
-        y: 212,
-      },
-      {
-        x: "helicopter",
-        y: 190,
-      },
-      {
-        x: "boat",
+        x: "05/06",
         y: 270,
       },
       {
-        x: "train",
+        x: "06/06",
         y: 9,
       },
       {
-        x: "subway",
+        x: "07/06",
         y: 75,
       },
       {
-        x: "bus",
+        x: "08/06",
         y: 175,
       },
       {
-        x: "car",
+        x: "09/06",
         y: 33,
       },
       {
-        x: "moto",
+        x: "10/06",
         y: 189,
       },
       {
-        x: "bicycle",
+        x: "11/06",
         y: 97,
       },
       {
-        x: "horse",
+        x: "12/06",
         y: 87,
       },
       {
-        x: "skateboard",
+        x: "13/06",
         y: 299,
       },
       {
-        x: "others",
+        x: "14/06",
         y: 251,
       },
     ],
   },
   {
-    id: "us",
-    color: tokens("dark").redAccent[200],
+    id: "CV Received",
+    color: tokens("dark").blueAccent[500],
     data: [
       {
-        x: "plane",
-        y: 191,
-      },
-      {
-        x: "helicopter",
-        y: 136,
-      },
-      {
-        x: "boat",
+        x: "05/06",
         y: 91,
       },
       {
-        x: "train",
+        x: "06/06",
         y: 190,
       },
       {
-        x: "subway",
+        x: "07/06",
         y: 211,
       },
       {
-        x: "bus",
+        x: "08/06",
         y: 152,
       },
       {
-        x: "car",
+        x: "09/06",
         y: 189,
       },
       {
-        x: "moto",
+        x: "10/06",
         y: 152,
       },
       {
-        x: "bicycle",
+        x: "11/06",
         y: 8,
       },
       {
-        x: "horse",
+        x: "12/06",
         y: 197,
       },
       {
-        x: "skateboard",
+        x: "13/06",
         y: 107,
       },
       {
-        x: "others",
+        x: "14/06",
         y: 170,
       },
     ],
