@@ -1,12 +1,55 @@
-import { Box,  useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataApplications } from "../../data/mockData";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hostServer } from "../../data/apiConfig";
 
 const ApplicationReview = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [data, setData] = useState({
+    loading: true,
+    applications: null,
+    error: null,
+  });
+
+  let fetchApplications = () => {
+    axios
+      .get(`${hostServer}/reporting/application_to_review?company_id=1`)
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          applications: response.data.response.map((e, index) => {
+            return {
+              id: index,
+              position: e.position,
+              total_cv: e.totalCvReceived,
+              cv_screening: e.cvScreening,
+              chatbot_screening: e.chatbotScreening,
+              interview_screening: e.interviewScreening,
+              interviewed: e.interviewDone,
+              hired: e.hired,
+              rejected: e.rejected,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
   const columns = [
     {
       field: "position",
@@ -54,11 +97,15 @@ const ApplicationReview = () => {
         },
       }}
     >
-      <DataGrid
-        disableRowSelectionOnClick={true}
-        rows={mockDataApplications}
-        columns={columns}
-      />
+      {data.applications ? (
+        <DataGrid
+          disableRowSelectionOnClick={true}
+          rows={data.applications}
+          columns={columns}
+        />
+      ) : (
+        <div>Loading...</div>
+      )}
     </Box>
   );
 };
