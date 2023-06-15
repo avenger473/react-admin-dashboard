@@ -241,7 +241,6 @@ export const mockDataApplications = [
   {
     id: 1,
     position: "HR Officer",
-    status: "Ongoing",
     total_cv: 35,
     cv_screening: 10,
     chatbot_screening: 5,
@@ -253,7 +252,6 @@ export const mockDataApplications = [
   {
     id: 2,
     position: "Software Engineer",
-    status: "Completed",
     total_cv: 50,
     cv_screening: 15,
     chatbot_screening: 10,
@@ -265,7 +263,6 @@ export const mockDataApplications = [
   {
     id: 3,
     position: "Marketing Manager",
-    status: "Ongoing",
     total_cv: 60,
     cv_screening: 20,
     chatbot_screening: 10,
@@ -277,7 +274,6 @@ export const mockDataApplications = [
   {
     id: 4,
     position: "Sales Representative",
-    status: "Ongoing",
     total_cv: 40,
     cv_screening: 10,
     chatbot_screening: 5,
@@ -289,7 +285,6 @@ export const mockDataApplications = [
   {
     id: 5,
     position: "Graphic Designer",
-    status: "Ongoing",
     total_cv: 25,
     cv_screening: 8,
     chatbot_screening: 4,

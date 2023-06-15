@@ -17,11 +17,6 @@ const Contacts = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-    },
-    {
       field: "total_cv",
       headerName: "CV Received",
       flex: 1,
