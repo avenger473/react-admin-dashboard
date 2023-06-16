@@ -1,75 +1,60 @@
-import * as React from "react";
-import {
-  Box,
-  Typography,
-  useTheme,
-  Menu,
-  MenuItem,
-  IconButton,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataCandidates } from "../../data/mockData";
 import Header from "../../components/Header";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-
-const options = ["View CV", "View Scorecard", "Edit", "View Profile"];
-
-export function LongMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  return (
-    <div>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          "aria-labelledby": "long-button",
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: "25ch",
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            onClick={(_) => {
-              console.log("clicked: ", option);
-              handleClose();
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-    </div>
-  );
-}
+import { LongMenu } from "./LongMenu";
+import axios from "axios";
+import { hostServer } from "../../data/apiConfig";
+import moment from "moment";
 
 const Candidates = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [data, setData] = useState({
+    loading: true,
+    candidates: null,
+    error: null,
+  });
+
+  let fetchApplicationsTrend = () => {
+    axios
+      .get(`${hostServer}/job/application/all?company_id=1`)
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          candidates: response.data.map((e, index) => {
+            return {
+              id: index,
+              name: e.candidate.name,
+              email: e.candidate.email,
+              position: e.job.position,
+              application_date: moment(e.created_at).format("DD-MM-YYYY"),
+              status: e.status,
+              scorecard_url: e.candidate.link_to_scorecard,
+              resume_url: e.candidate.link_to_cv,
+              comment: e.comments,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplicationsTrend();
+  }, []);
+
+  console.log(data);
+
   const columns = [
     {
       field: "menu",
@@ -146,7 +131,11 @@ const Candidates = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataCandidates} columns={columns} />
+        {data.candidates ? (
+          <DataGrid rows={data.candidates} columns={columns} />
+        ) : (
+          <div>Loading...</div>
+        )}
       </Box>
     </Box>
   );
