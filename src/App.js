@@ -6,8 +6,9 @@ import Dashboard from "./scenes/dashboard";
 import Candidates from "./scenes/candidates";
 import Invoices from "./scenes/invoices";
 import Reporting from "./scenes/reporting";
+import Jobs from "./scenes/jobs";
 import Bar from "./scenes/bar";
-import Form from "./scenes/form";
+import CreateJobForm from "./scenes/createJobForm";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/settings/faq";
@@ -35,7 +36,8 @@ function App() {
               <Route path="/candidates" element={<Candidates />} />
               <Route path="/reporting" element={<Reporting />} />
               <Route path="/invoices" element={<Invoices />} />
-              <Route path="/create_job" element={<Form />} />
+              <Route path="/create_job" element={<CreateJobForm />} />
+              <Route path="/jobs" element={<Jobs />} />
               <Route path="/billing" element={<Billing />} />
               <Route path="/general" element={<General />} />
               <Route path="/bar" element={<Bar />} />

@@ -144,6 +144,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
+              title="Jobs"
+              to="/jobs"
+              icon={<WorkOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
               title="Create Job"
               to="/create_job"
               icon={<WorkOutlineOutlinedIcon />}

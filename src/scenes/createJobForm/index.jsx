@@ -13,18 +13,67 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/Header";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
+import { useState } from "react";
+import { CSVUploadDialog } from "./CSVUploadDialog";
+import { hostServer } from "../../data/apiConfig";
+import axios from "axios";
 
-const Form = () => {
+function getArrayfromString(str) {
+  return str.split(",").map((word) => word.trim());
+}
+
+const CreateJobForm = () => {
   // const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  let submitFormData = (data) => {
+    // console.log({
+    //   title: data.jobTitle,
+    //   description: data.jobDescription,
+    //   position: data.position,
+    //   required_skills: getArrayfromString(data.skillsRequired),
+    //   yoe: data.yearOfExperience,
+    //   location: data.location,
+    //   education_level: data.educationLevel,
+    //   field_of_education: data.educationField,
+    // });
+    axios
+      .post(`${hostServer}/reporting/candidate_quality`, {
+        title: data.jobTitle,
+        description: data.jobDescription,
+        position: data.position,
+        required_skills: data.skillsRequired.split(", "),
+        yoe: data.yearOfExperience,
+        location: data.location,
+        education_level: data.educationLevel,
+        field_of_education: data.educationField,
+      })
+      .then((response) => {
+        prompt("New Job Added");
+      })
+      .catch((error) => {
+        alert("Try Again!");
+      });
+  };
+
   const handleFormSubmit = (values) => {
-    console.log(values);
+    submitFormData(values);
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
   };
 
   return (
     <Box m="20px">
+      <CSVUploadDialog openDialog={openDialog} handleClose={handleClose} />
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="CREATE JOB" subtitle="Create a New Job Profile" />
         <Box>
@@ -35,6 +84,9 @@ const Form = () => {
               fontSize: "14px",
               fontWeight: "bold",
               padding: "10px 20px",
+            }}
+            onClick={() => {
+              handleClickOpen();
             }}
           >
             <UploadFileOutlinedIcon sx={{ mr: "10px" }} />
@@ -59,7 +111,7 @@ const Form = () => {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(3, minmax(0, 1fr))"
+              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
             >
               <TextField
                 fullWidth
@@ -87,6 +139,47 @@ const Form = () => {
                 name="jobDescription"
                 error={!!touched.jobDescription && !!errors.jobDescription}
                 helperText={touched.jobDescription && errors.jobDescription}
+                sx={{ gridColumn: "span 2", gridRowStart: "2" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Position"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.position}
+                name="position"
+                error={!!touched.position && !!errors.position}
+                helperText={touched.position && errors.position}
+                sx={{ gridColumn: "span 2" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Skills"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="Ex: Excel, Python, Analytics. Use comma seperated values"
+                value={values.skillsRequired}
+                name="skillsRequired"
+                error={!!touched.skillsRequired && !!errors.skillsRequired}
+                helperText={touched.skillsRequired && errors.skillsRequired}
+                sx={{ gridColumn: "span 2" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Location"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="Ex: New Delhi, India"
+                value={values.location}
+                name="location"
+                error={!!touched.location && !!errors.location}
+                helperText={touched.location && errors.location}
                 sx={{ gridColumn: "span 2" }}
               />
               <FormControl
@@ -121,17 +214,17 @@ const Form = () => {
                 variant="filled"
                 sx={{ gridColumn: "span 2" }}
                 fullWidth
-                error={!!touched.experience && !!errors.experience}
+                error={!!touched.yearOfExperience && !!errors.yearOfExperience}
               >
-                <InputLabel id="experience-label">
+                <InputLabel id="yearOfExperience-label">
                   Years of Education{" "}
                 </InputLabel>
                 <Select
-                  labelId="experience-label"
-                  id="experience"
-                  value={values.experience}
+                  labelId="yearOfExperience-label"
+                  id="yearOfExperience"
+                  value={values.yearOfExperience}
                   label="Years of Education"
-                  name="experience"
+                  name="yearOfExperience"
                   onChange={handleChange}
                 >
                   <MenuItem value="">
@@ -193,33 +286,28 @@ const Form = () => {
 const checkoutSchema = yup.object().shape({
   jobTitle: yup.string().required("required"),
   jobDescription: yup.string().required("required"),
-  skillsRequired: yup.array().required("required"),
-  experience: yup.string().required("required"),
+  position: yup.string().required("required"),
+  skillsRequired: yup.string().required("required"),
+  yearOfExperience: yup.string().required("required"),
   educationLevel: yup.string().required("required"),
   educationField: yup.string().required("required"),
 });
 const initialValues = {
   jobTitle: "",
   jobDescription: "",
-  skillsRequired: [],
-  experience: "",
+  position: "",
+  skillsRequired: "",
+  yearOfExperience: "",
   educationLevel: "",
   educationField: "",
+  location: "",
 };
 
 const jobApplicationFieldsValues = [
-  "Accounting",
-  "Administrative",
-  "Customer Service",
-  "Engineering",
-  "Finance",
-  "Human Resources",
-  "Information Technology",
+  "Management",
   "Marketing",
-  "Operations",
-  "Project Management",
-  "Sales",
-  "Software Development",
+  "Engineering",
+  "MassCommunication",
 ];
 
 const yearsOfExperienceValues = [
@@ -233,11 +321,12 @@ const yearsOfExperienceValues = [
 ];
 
 const educationLevelValues = [
-  "High School",
-  "Associate Degree",
-  "Bachelor's Degree",
-  "Master's Degree",
-  "Doctorate Degree",
+  "HighSchool",
+  "Intermediate",
+  "Diploma",
+  "Bachelors",
+  "Masters",
+  "Doctorate",
 ];
 
-export default Form;
+export default CreateJobForm;

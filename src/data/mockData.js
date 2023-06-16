@@ -93,6 +93,40 @@ export const mockDataInterviews = [
   },
 ];
 
+export const mockDataJobs = [
+  {
+    id: 1,
+    jobId: 3,
+    code: "JOB_69259",
+    title: "SDE III",
+    description:
+      "Software developement enginner with good design and programming skills.",
+    position: "Software Development Engineer III",
+    yoe: "5-7 years",
+    location: "Bangalore, Karnataka",
+    fieldOfStudy: "Engineering",
+    required_skills: ["Java", '"Spring Boot"', "Kotlin"],
+    company_id: 1,
+    education_level: "Bachelors",
+    field_of_education: "Engineering",
+  },
+  {
+    id: 2,
+    jobId: 4,
+    code: "JOB_99321",
+    title: "Tech Lead",
+    description: "Tech Lead with good design and programming skills.",
+    position: "Technical Lead",
+    yoe: "9-12 years",
+    location: "Bangalore, Karnataka",
+    fieldOfStudy: "Engineering",
+    required_skills: ["Java", '" Python"', '" AWS"'],
+    company_id: 1,
+    education_level: "Masters",
+    field_of_education: "Engineering",
+  },
+];
+
 export const mockDataCandidates = [
   {
     id: 1,
