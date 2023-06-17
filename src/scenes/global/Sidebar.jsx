@@ -108,7 +108,7 @@ const Sidebar = () => {
                   Ed Roh
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  HRBP
                 </Typography>
               </Box>
             </Box>

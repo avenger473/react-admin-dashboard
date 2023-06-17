@@ -24,9 +24,7 @@ export const CSVUploadDialog = ({ openDialog, handleClose }) => {
   console.log(file);
   const uploadFile = (file) => {
     let formData = new FormData();
-
     formData.append("file", file);
-
     axios
       .post(`${hostServer}/job/import_from_csv`, formData, {
         headers: {
