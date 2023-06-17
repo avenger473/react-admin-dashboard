@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
@@ -139,7 +139,9 @@ const Reporting = () => {
             components={{ Toolbar: GridToolbar }}
           />
         ) : (
-          <div>Loading...</div>
+          <Box display={"flex"} justifyContent={"center"} mt="100px">
+            <CircularProgress color="secondary" />
+          </Box>
         )}
       </Box>
     </Box>

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, useTheme, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { mockDataJobs } from "../../data/mockData";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
 import axios from "axios";
 import { hostServer } from "../../data/apiConfig";
-import moment from "moment";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 
 const Jobs = () => {
@@ -17,28 +21,21 @@ const Jobs = () => {
 
   const [data, setData] = useState({
     loading: true,
-    candidates: null,
+    jobs: null,
     error: null,
   });
 
-  let fetchApplicationsTrend = () => {
+  let fetchJobs = () => {
     axios
-      .get(`${hostServer}/job/application/all?company_id=1`)
+      .get(`${hostServer}/job/all/?company_code=Port1451`)
       .then((response) => {
         setData({
           ...data,
           loading: false,
-          candidates: response.data.map((e, index) => {
+          jobs: response.data.map((e, index) => {
             return {
+              ...e,
               id: index,
-              name: e.candidate.name,
-              email: e.candidate.email,
-              position: e.job.position,
-              application_date: moment(e.created_at).format("DD-MM-YYYY"),
-              status: e.status,
-              scorecard_url: e.candidate.link_to_scorecard,
-              resume_url: e.candidate.link_to_cv,
-              comment: e.comments,
             };
           }),
         });
@@ -53,7 +50,7 @@ const Jobs = () => {
   };
 
   useEffect(() => {
-    fetchApplicationsTrend();
+    fetchJobs();
   }, []);
 
   console.log(data);
@@ -78,7 +75,7 @@ const Jobs = () => {
     {
       field: "position",
       headerName: "Position",
-      flex: 1,
+      flex: 1.5,
     },
     {
       field: "location",
@@ -88,7 +85,7 @@ const Jobs = () => {
     {
       field: "yoe",
       headerName: "Year of Experience",
-      flex: 1,
+      flex: 0.75,
     },
     {
       field: "education_level",
@@ -111,7 +108,7 @@ const Jobs = () => {
           <Link to={"/create_job"}>
             <Button
               sx={{
-                backgroundColor: colors.greenAccent[700],
+                backgroundColor: colors.greenAccent[600],
                 color: colors.grey[100],
                 fontSize: "14px",
                 fontWeight: "bold",
@@ -153,11 +150,15 @@ const Jobs = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataJobs} columns={columns} />
-        {/* {data.candidates ? (
+        {data.loading ? (
+          <Box display={"flex"} justifyContent={"center"} mt={"100px"}>
+            <CircularProgress color="secondary" />
+          </Box>
+        ) : data.jobs ? (
+          <DataGrid rows={data.jobs} columns={columns} />
         ) : (
-          <div>Loading...</div>
-        )} */}
+          <div>{data.error}</div>
+        )}
       </Box>
     </Box>
   );

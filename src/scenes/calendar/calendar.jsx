@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -11,14 +11,60 @@ import {
   ListItemText,
   Typography,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
+import axios from "axios";
+import { hostServer } from "../../data/apiConfig";
 
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [currentEvents, setCurrentEvents] = useState([]);
+
+  let fetchCalendarEvents = () => {
+    axios
+      .get(`${hostServer}/interview/all?user_id=1`)
+      .then((response) => {
+        setCurrentEvents(response.data);
+      })
+      .catch((error) => {
+        // alert("Something Went Wrong, Retry?");
+        setCurrentEvents([
+          {
+            id: "12315",
+            title: "All-day event",
+            start: "1686700800000",
+            end: "1686787199000",
+          },
+          {
+            id: "5123",
+            title: "Timed event",
+            date: "2022-09-28",
+          },
+        ]);
+      });
+  };
+
+  let createEvent = () => {
+    axios
+      .post(`${hostServer}/reporting/candidate_quality`, {
+        start_ts: 0,
+        end_ts: Date.now(),
+        company_id: 1, //TODO get company id
+      })
+      .then((response) => {
+        alert("Event Created");
+      })
+      .catch((error) => {
+        alert("Something Went Wrong!");
+      });
+  };
+
+  useEffect(() => {
+    fetchCalendarEvents();
+  }, []);
 
   const handleDateClick = (selected) => {
     const title = prompt("Please enter a new title for your event");
@@ -49,84 +95,78 @@ const Calendar = () => {
     <Box m="20px">
       <Header title="MY CALENDAR" />
 
-      <Box display="flex" justifyContent="space-between">
-        {/* CALENDAR SIDEBAR */}
-        <Box
-          flex="1 1 20%"
-          backgroundColor={colors.primary[400]}
-          p="15px"
-          borderRadius="4px"
-        >
-          <Typography variant="h5">Events</Typography>
-          <List>
-            {currentEvents.map((event) => (
-              <ListItem
-                key={event.id}
-                sx={{
-                  backgroundColor: colors.greenAccent[500],
-                  margin: "10px 0",
-                  borderRadius: "2px",
-                }}
-              >
-                <ListItemText
-                  primary={event.title}
-                  secondary={
-                    <Typography>
-                      {formatDate(event.start, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+      {currentEvents ? (
+        <Box display="flex" justifyContent="space-between">
+          {/* CALENDAR SIDEBAR */}
+          <Box
+            flex="1 1 20%"
+            backgroundColor={colors.primary[400]}
+            p="15px"
+            borderRadius="4px"
+          >
+            <Typography variant="h5">Events</Typography>
+            <List>
+              {currentEvents.map((event) => (
+                <ListItem
+                  key={event.id}
+                  sx={{
+                    backgroundColor: colors.greenAccent[500],
+                    margin: "10px 0",
+                    borderRadius: "2px",
+                  }}
+                >
+                  <ListItemText
+                    primary={event.title}
+                    secondary={
+                      <Typography>
+                        {formatDate(event.start, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
 
-        {/* CALENDAR */}
-        <Box flex="1 1 100%" ml="15px">
-          <FullCalendar
-            height="75vh"
-            plugins={[
-              dayGridPlugin,
-              timeGridPlugin,
-              interactionPlugin,
-              listPlugin,
-            ]}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-            }}
-            initialView="dayGridMonth"
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            select={handleDateClick}
-            eventClick={handleEventClick}
-            eventsSet={(events) => {
-              console.log("events", events);
-              setCurrentEvents(events);
-            }}
-            initialEvents={[
-              {
-                id: "12315",
-                title: "All-day event",
-                start: "1686700800000",
-                end: "1686787199000",
-              },
-              {
-                id: "5123",
-                title: "Timed event",
-                date: "2022-09-28",
-              },
-            ]}
-          />
+          {/* CALENDAR */}
+          <Box flex="1 1 100%" ml="15px">
+            <FullCalendar
+              height="75vh"
+              plugins={[
+                dayGridPlugin,
+                timeGridPlugin,
+                interactionPlugin,
+                listPlugin,
+              ]}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+              }}
+              initialView="dayGridMonth"
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              select={handleDateClick}
+              eventClick={handleEventClick}
+              eventsSet={(events) => {
+                console.log("events", events);
+                setCurrentEvents(events);
+              }}
+              initialEvents={currentEvents}
+            />
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box display={"flex"} justifyContent={"center"} mt="100px">
+          <CircularProgress color="secondary" />
+        </Box>
+      )}
     </Box>
   );
 };

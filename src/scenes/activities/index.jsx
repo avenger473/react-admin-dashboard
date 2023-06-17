@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { LongMenu } from "./LongMenu";
@@ -151,7 +151,9 @@ const Activities = () => {
           columns={columns}
         />
       ) : (
-        <div>Loading...</div>
+        <Box display={"flex"} justifyContent={"center"} mt="100px">
+          <CircularProgress color="secondary" />
+        </Box>
       )}
     </Box>
   );

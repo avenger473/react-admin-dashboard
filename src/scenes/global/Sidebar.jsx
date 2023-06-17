@@ -150,13 +150,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Create Job"
-              to="/create_job"
-              icon={<WorkOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <SubMenu
               title={<Typography>Settings</Typography>}
               icon={<SettingsOutlinedIcon />}

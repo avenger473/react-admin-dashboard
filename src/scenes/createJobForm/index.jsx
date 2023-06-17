@@ -39,18 +39,19 @@ const CreateJobForm = () => {
     //   field_of_education: data.educationField,
     // });
     axios
-      .post(`${hostServer}/reporting/candidate_quality`, {
+      .post(`${hostServer}/job/`, {
         title: data.jobTitle,
         description: data.jobDescription,
         position: data.position,
-        required_skills: data.skillsRequired.split(", "),
+        required_skills: getArrayfromString(data.skillsRequired),
         yoe: data.yearOfExperience,
         location: data.location,
         education_level: data.educationLevel,
         field_of_education: data.educationField,
+        company_id: 1,
       })
       .then((response) => {
-        prompt("New Job Added");
+        alert(`New Job Added with Job Code: ${response.data.job_code}`);
       })
       .catch((error) => {
         alert("Try Again!");
@@ -203,9 +204,7 @@ const CreateJobForm = () => {
                     <b>None</b>
                   </MenuItem>
                   {jobApplicationFieldsValues.map((field) => {
-                    return (
-                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
-                    );
+                    return <MenuItem value={field}>{field}</MenuItem>;
                   })}
                 </Select>
               </FormControl>
@@ -231,9 +230,7 @@ const CreateJobForm = () => {
                     <b>None</b>
                   </MenuItem>
                   {yearsOfExperienceValues.map((field) => {
-                    return (
-                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
-                    );
+                    return <MenuItem value={field}>{field}</MenuItem>;
                   })}
                 </Select>
               </FormControl>
@@ -259,9 +256,7 @@ const CreateJobForm = () => {
                     <b>None</b>
                   </MenuItem>
                   {educationLevelValues.map((field) => {
-                    return (
-                      <MenuItem value={field.toLowerCase()}>{field}</MenuItem>
-                    );
+                    return <MenuItem value={field}>{field}</MenuItem>;
                   })}
                 </Select>
               </FormControl>

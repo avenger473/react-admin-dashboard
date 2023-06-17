@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import React, { useState, useEffect } from "react";
@@ -104,7 +104,9 @@ const ApplicationReview = () => {
           columns={columns}
         />
       ) : (
-        <div>Loading...</div>
+        <Box display={"flex"} justifyContent={"center"} mt="100px">
+          <CircularProgress color="secondary" />
+        </Box>
       )}
     </Box>
   );
