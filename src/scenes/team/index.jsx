@@ -100,7 +100,11 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataTeam} columns={columns} />
+        <DataGrid
+          rows={mockDataTeam}
+          columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
+        />
       </Box>
     </Box>
   );

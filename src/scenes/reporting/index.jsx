@@ -137,6 +137,7 @@ const Reporting = () => {
             rows={data.applications}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
+            rowsPerPageOptions={[5, 10, 25, 100]}
           />
         ) : (
           <Box display={"flex"} justifyContent={"center"} mt="100px">

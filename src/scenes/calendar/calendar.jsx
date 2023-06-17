@@ -21,7 +21,19 @@ import { hostServer } from "../../data/apiConfig";
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [currentEvents, setCurrentEvents] = useState([]);
+  const [currentEvents, setCurrentEvents] = useState([
+    {
+      id: "12315",
+      title: "All-day event",
+      start: "1686700800000",
+      end: "1686787199000",
+    },
+    {
+      id: "5123",
+      title: "Timed event",
+      date: "2022-09-28",
+    },
+  ]);
 
   let fetchCalendarEvents = () => {
     axios
@@ -63,7 +75,7 @@ const Calendar = () => {
   };
 
   useEffect(() => {
-    fetchCalendarEvents();
+    // fetchCalendarEvents();
   }, []);
 
   const handleDateClick = (selected) => {

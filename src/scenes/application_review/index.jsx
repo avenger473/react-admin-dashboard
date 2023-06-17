@@ -102,6 +102,7 @@ const ApplicationReview = () => {
           disableRowSelectionOnClick={true}
           rows={data.applications}
           columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
         />
       ) : (
         <Box display={"flex"} justifyContent={"center"} mt="100px">

@@ -7,7 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
@@ -148,6 +148,9 @@ const Jobs = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
         }}
       >
         {data.loading ? (
@@ -155,7 +158,12 @@ const Jobs = () => {
             <CircularProgress color="secondary" />
           </Box>
         ) : data.jobs ? (
-          <DataGrid rows={data.jobs} columns={columns} />
+          <DataGrid
+            rows={data.jobs}
+            columns={columns}
+            rowsPerPageOptions={[5, 10, 25, 100]}
+            components={{ Toolbar: GridToolbar }}
+          />
         ) : (
           <div>{data.error}</div>
         )}

@@ -21,20 +21,26 @@ export const CSVUploadDialog = ({ openDialog, handleClose }) => {
   const colors = tokens(theme.palette.mode);
   //handle file upload
   let [file, setFile] = useState(null);
-
+  console.log(file);
   const uploadFile = (file) => {
+    let formData = new FormData();
+
+    formData.append("file", file);
+
     axios
-      .post(`${hostServer}/job/import_from_csv`, file, {
+      .post(`${hostServer}/job/import_from_csv`, formData, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        alert("Jobs created from CSV File");
+        alert(
+          `${response.data.jobs_created_successfully} Jobs created from CSV File`
+        );
         handleClose();
       })
       .catch((error) => {
-        alert("Error in Job Created, Recheck your file");
+        alert("Error in Job Creation, Recheck your file");
       });
   };
 

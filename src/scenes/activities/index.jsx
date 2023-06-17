@@ -37,7 +37,7 @@ const Activities = () => {
               },
               scorecard_url: null,
               resume_url: e.candidate.link_to_cv,
-              comment: e.jobApplication.comment,
+              comment: e.jobApplication.comments,
             };
           }),
         });
@@ -149,6 +149,7 @@ const Activities = () => {
           disableRowSelectionOnClick={true}
           rows={data.interviews}
           columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
         />
       ) : (
         <Box display={"flex"} justifyContent={"center"} mt="100px">

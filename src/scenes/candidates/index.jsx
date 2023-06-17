@@ -132,7 +132,11 @@ const Candidates = () => {
         }}
       >
         {data.candidates ? (
-          <DataGrid rows={data.candidates} columns={columns} />
+          <DataGrid
+            rows={data.candidates}
+            columns={columns}
+            rowsPerPageOptions={[5, 10, 25, 100]}
+          />
         ) : (
           <Box display={"flex"} justifyContent={"center"} mt="100px">
             <CircularProgress color="secondary" />
