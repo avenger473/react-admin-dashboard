@@ -27,17 +27,7 @@ const CreateJobForm = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  let submitFormData = (data) => {
-    // console.log({
-    //   title: data.jobTitle,
-    //   description: data.jobDescription,
-    //   position: data.position,
-    //   required_skills: getArrayfromString(data.skillsRequired),
-    //   yoe: data.yearOfExperience,
-    //   location: data.location,
-    //   education_level: data.educationLevel,
-    //   field_of_education: data.educationField,
-    // });
+  let submitFormData = (data, onSuccess) => {
     axios
       .post(`${hostServer}/job/`, {
         title: data.jobTitle,
@@ -51,6 +41,7 @@ const CreateJobForm = () => {
         company_id: 1,
       })
       .then((response) => {
+        onSuccess();
         alert(`New Job Added with Job Code: ${response.data.job_code}`);
       })
       .catch((error) => {
@@ -58,8 +49,8 @@ const CreateJobForm = () => {
       });
   };
 
-  const handleFormSubmit = (values) => {
-    submitFormData(values);
+  const handleFormSubmit = (values, onSuccess) => {
+    submitFormData(values, onSuccess);
   };
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -96,7 +87,9 @@ const CreateJobForm = () => {
         </Box>
       </Box>
       <Formik
-        onSubmit={handleFormSubmit}
+        onSubmit={(values, { resetForm }) => {
+          handleFormSubmit(values, resetForm);
+        }}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
@@ -136,7 +129,7 @@ const CreateJobForm = () => {
                 label="Job Description"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.lastName}
+                value={values.jobDescription}
                 name="jobDescription"
                 error={!!touched.jobDescription && !!errors.jobDescription}
                 helperText={touched.jobDescription && errors.jobDescription}
