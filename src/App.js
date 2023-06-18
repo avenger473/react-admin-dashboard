@@ -18,6 +18,7 @@ import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
+import Signin from "./scenes/signin";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -33,6 +34,7 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/signin" element={<Signin />} />
               <Route path="/candidates" element={<Candidates />} />
               <Route path="/reporting" element={<Reporting />} />
               <Route path="/invoices" element={<Invoices />} />

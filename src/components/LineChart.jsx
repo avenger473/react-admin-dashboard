@@ -1,5 +1,5 @@
 import { ResponsiveLine } from "@nivo/line";
-import { useTheme } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -70,7 +70,11 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     fetchApplicationsTrend();
   }, []);
 
-  return data.trends ? (
+  return data.loading ? (
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <CircularProgress color="secondary" />
+    </Box>
+  ) : data.trends ? (
     <ResponsiveLine
       data={data.trends}
       theme={{
@@ -175,7 +179,9 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
       ]}
     />
   ) : (
-    <div>Loadinfg</div>
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <div onClick={(_) => fetchApplicationsTrend()}>Retry</div>
+    </Box>
   );
 };
 

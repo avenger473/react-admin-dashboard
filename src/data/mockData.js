@@ -93,6 +93,24 @@ export const mockDataInterviews = [
   },
 ];
 
+export const mockDataProfile = {
+  userId: 1,
+  name: "Ananya",
+  company: {
+    companyId: 1,
+    name: "Porter",
+    overview: null,
+    companyUrl: null,
+    companyCode: "Port1451",
+  },
+  username: "ananya_1998",
+  country: "India",
+  email: "ananya1998@gmail.com",
+  mobile: "9988998899",
+  language: "English",
+  company_id: 1,
+};
+
 export const mockDataJobs = [
   {
     id: 1,

@@ -61,7 +61,6 @@ const Dashboard = () => {
             <Typography variant="h5" fontWeight="600">
               Average Candidate Quality
             </Typography>
-
             <Box height={"100%"}>
               <PieChart />
             </Box>

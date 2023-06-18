@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Box, Typography, useTheme, CircularProgress } from "@mui/material";
 import { tokens } from "../../../theme";
 import Header from "../../../components/Header";
+import { mockDataProfile } from "../../../data/mockData";
 import axios from "axios";
 import { hostServer } from "../../../data/apiConfig";
+import ProfileForm from "./ProfileForm";
 
 const Form = () => {
   const theme = useTheme();
@@ -16,28 +18,33 @@ const Form = () => {
   });
 
   let fetchUserProfile = () => {
-    axios
-      .get(`${hostServer}/user/1`)
-      .then((response) => {
-        setData({
-          ...data,
-          loading: false,
-          profile: {
-            name: response.data.name,
-            email: response.data.email,
-            country: response.data.country,
-            mobile: response.data.mobile,
-            companyName: response.data.company.name,
-          },
-        });
-      })
-      .catch((error) => {
-        setData({
-          ...data,
-          loading: false,
-          error: error,
-        });
-      });
+    setData({
+      ...data,
+      loading: false,
+      profile: mockDataProfile,
+    });
+    // axios
+    //   .get(`${hostServer}/user/1`)
+    //   .then((response) => {
+    //     setData({
+    //       ...data,
+    //       loading: false,
+    //       profile: {
+    //         name: response.data.name,
+    //         email: response.data.email,
+    //         country: response.data.country,
+    //         mobile: response.data.mobile,
+    //         companyName: response.data.company.name,
+    //       },
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setData({
+    //       ...data,
+    //       loading: false,
+    //       error: error,
+    //     });
+    //   });
   };
 
   useEffect(() => {
@@ -53,7 +60,7 @@ const Form = () => {
             <CircularProgress color="secondary" />
           </Box>
         ) : data.profile ? (
-          <div>{data.profile.name}</div>
+          <ProfileForm profile={data.profile} />
         ) : (
           <div>{data.error}</div>
         )}
