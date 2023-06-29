@@ -12,7 +12,7 @@ const ProfileForm = ({ profile }) => {
     email: profile.email,
     country: profile.country,
     mobile: profile.mobile,
-    companyName: profile.company.name,
+    companyName: profile.companyName,
   };
 
   const handleFormSubmit = (values, onSuccess) => {

@@ -18,33 +18,28 @@ const Form = () => {
   });
 
   let fetchUserProfile = () => {
-    setData({
-      ...data,
-      loading: false,
-      profile: mockDataProfile,
-    });
-    // axios
-    //   .get(`${hostServer}/user/1`)
-    //   .then((response) => {
-    //     setData({
-    //       ...data,
-    //       loading: false,
-    //       profile: {
-    //         name: response.data.name,
-    //         email: response.data.email,
-    //         country: response.data.country,
-    //         mobile: response.data.mobile,
-    //         companyName: response.data.company.name,
-    //       },
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     setData({
-    //       ...data,
-    //       loading: false,
-    //       error: error,
-    //     });
-    //   });
+    axios
+      .get(`${hostServer}/user/1`)
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          profile: {
+            name: response.data.name,
+            email: response.data.email,
+            country: response.data.country,
+            mobile: response.data.mobile,
+            companyName: response.data.company.name,
+          },
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
   };
 
   useEffect(() => {
