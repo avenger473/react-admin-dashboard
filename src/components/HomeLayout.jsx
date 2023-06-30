@@ -8,9 +8,5 @@ export const HomeLayout = () => {
   //     return <Navigate to="/dashboard/profile" />;
   //   }
 
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 };
