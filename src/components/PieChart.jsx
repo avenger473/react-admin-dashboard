@@ -4,11 +4,13 @@ import { useTheme } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, CircularProgress } from "@mui/material";
-import { hostServer } from "../data/apiConfig";
+import { hostServer, getAuthHeader } from "../data/apiConfig";
+import { useAuth } from "../hooks/useAuth";
 
 const PieChart = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -18,11 +20,15 @@ const PieChart = () => {
 
   let fetchCandidatesQuality = () => {
     axios
-      .post(`${hostServer}/reporting/candidate_quality`, {
-        start_ts: 0,
-        end_ts: Date.now(),
-        company_id: 1, //TODO get company id
-      })
+      .post(
+        `${hostServer}/reporting/candidate_quality`,
+        {
+          start_ts: 0,
+          end_ts: Date.now(),
+          company_id: 1, //TODO get company id
+        },
+        getAuthHeader(user)
+      )
       .then((response) => {
         setData({
           ...data,

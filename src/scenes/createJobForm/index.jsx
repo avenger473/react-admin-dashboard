@@ -15,8 +15,9 @@ import Header from "../../components/Header";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { useState } from "react";
 import { CSVUploadDialog } from "./CSVUploadDialog";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
 
 function getArrayfromString(str) {
   return str.split(",").map((word) => word.trim());
@@ -26,20 +27,25 @@ const CreateJobForm = () => {
   // const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   let submitFormData = (data, onSuccess) => {
     axios
-      .post(`${hostServer}/job/`, {
-        title: data.jobTitle,
-        description: data.jobDescription,
-        position: data.position,
-        required_skills: getArrayfromString(data.skillsRequired),
-        yoe: data.yearOfExperience,
-        location: data.location,
-        education_level: data.educationLevel,
-        field_of_education: data.educationField,
-        company_id: 1,
-      })
+      .post(
+        `${hostServer}/job/`,
+        {
+          title: data.jobTitle,
+          description: data.jobDescription,
+          position: data.position,
+          required_skills: getArrayfromString(data.skillsRequired),
+          yoe: data.yearOfExperience,
+          location: data.location,
+          education_level: data.educationLevel,
+          field_of_education: data.educationField,
+          company_id: 1,
+        },
+        getAuthHeader(user)
+      )
       .then((response) => {
         onSuccess();
         alert(`New Job Added with Job Code: ${response.data.job_code}`);

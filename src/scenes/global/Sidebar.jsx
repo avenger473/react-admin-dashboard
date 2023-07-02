@@ -14,6 +14,8 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../../hooks/useAuth";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -29,6 +31,24 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     >
       <Typography>{title}</Typography>
       <Link to={"/dashboard" + to} />
+    </MenuItem>
+  );
+};
+
+const LogoutMenuItem = () => {
+  const theme = useTheme();
+  const { logout } = useAuth();
+  const colors = tokens(theme.palette.mode);
+
+  return (
+    <MenuItem
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={logout}
+      icon={<LogoutIcon />}
+    >
+      <Typography>Logout</Typography>
     </MenuItem>
   );
 };
@@ -179,6 +199,7 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             </SubMenu>
+            <LogoutMenuItem />
           </Box>
         </Menu>
       </ProSidebar>

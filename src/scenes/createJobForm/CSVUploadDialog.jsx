@@ -13,12 +13,14 @@ import {
 import { tokens } from "../../theme";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 export const CSVUploadDialog = ({ openDialog, handleClose }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
   //handle file upload
   let [file, setFile] = useState(null);
   console.log(file);
@@ -29,6 +31,7 @@ export const CSVUploadDialog = ({ openDialog, handleClose }) => {
       .post(`${hostServer}/job/import_from_csv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user.access_token}`,
         },
       })
       .then((response) => {

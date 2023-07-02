@@ -4,12 +4,14 @@ import { tokens } from "../../../theme";
 import Header from "../../../components/Header";
 import { mockDataProfile } from "../../../data/mockData";
 import axios from "axios";
-import { hostServer } from "../../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../../data/apiConfig";
 import ProfileForm from "./ProfileForm";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Form = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -19,7 +21,7 @@ const Form = () => {
 
   let fetchUserProfile = () => {
     axios
-      .get(`${hostServer}/user/1`)
+      .get(`${hostServer}/user/1`, getAuthHeader(user))
       .then((response) => {
         setData({
           ...data,

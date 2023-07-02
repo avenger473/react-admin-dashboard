@@ -1,5 +1,4 @@
-import { Routes, Route } from "react-router-dom";
-
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./scenes/dashboard";
 import Candidates from "./scenes/candidates";
 import Invoices from "./scenes/invoices";
@@ -16,7 +15,7 @@ import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
-import Signin from "./scenes/signin";
+import Login from "./scenes/login";
 import { HomeLayout } from "./components/HomeLayout";
 import { ProtectedLayout } from "./components/ProtectedLayout";
 
@@ -30,7 +29,11 @@ function App() {
         <div className="app">
           <Routes>
             <Route element={<HomeLayout />}>
-              <Route path="/login" element={<Signin />} />
+              <Route
+                path=""
+                element={<Navigate to="/login" replace={true} />}
+              />
+              <Route path="/login" element={<Login />} />
             </Route>
 
             <Route path="/dashboard" element={<ProtectedLayout />}>

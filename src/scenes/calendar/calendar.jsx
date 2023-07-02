@@ -16,11 +16,13 @@ import {
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
+import { useAuth } from "../../hooks/useAuth";
 
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
   const [currentEvents, setCurrentEvents] = useState([
     {
       id: "12315",
@@ -37,7 +39,7 @@ const Calendar = () => {
 
   let fetchCalendarEvents = () => {
     axios
-      .get(`${hostServer}/interview/all?user_id=1`)
+      .get(`${hostServer}/interview/all?user_id=1`, getAuthHeader(user))
       .then((response) => {
         setCurrentEvents(response.data);
       })

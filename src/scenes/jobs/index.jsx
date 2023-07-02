@@ -12,12 +12,14 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import { useAuth } from "../../hooks/useAuth";
 
 const Jobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -27,7 +29,7 @@ const Jobs = () => {
 
   let fetchJobs = () => {
     axios
-      .get(`${hostServer}/job/all/?company_code=Port1451`)
+      .get(`${hostServer}/job/all/?company_code=Port1451`, getAuthHeader(user))
       .then((response) => {
         setData({
           ...data,

@@ -3,10 +3,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
+import { useAuth } from "../../hooks/useAuth";
 
 const ApplicationReview = () => {
   const theme = useTheme();
+  const { user } = useAuth();
   const colors = tokens(theme.palette.mode);
 
   const [data, setData] = useState({
@@ -17,7 +19,10 @@ const ApplicationReview = () => {
 
   let fetchApplications = () => {
     axios
-      .get(`${hostServer}/reporting/application_to_review?company_id=1`)
+      .get(
+        `${hostServer}/reporting/application_to_review?company_id=1`,
+        getAuthHeader(user)
+      )
       .then((response) => {
         setData({
           ...data,

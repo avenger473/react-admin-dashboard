@@ -5,12 +5,14 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import moment from "moment";
+import { useAuth } from "../../hooks/useAuth";
 
 const Candidates = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -20,7 +22,10 @@ const Candidates = () => {
 
   let fetchApplicationsTrend = () => {
     axios
-      .get(`${hostServer}/job/application/all?company_id=1`)
+      .get(
+        `${hostServer}/job/application/all?company_id=1`,
+        getAuthHeader(user)
+      )
       .then((response) => {
         setData({
           ...data,

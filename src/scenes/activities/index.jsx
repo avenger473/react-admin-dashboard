@@ -4,12 +4,14 @@ import { tokens } from "../../theme";
 import { LongMenu } from "./LongMenu";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { hostServer } from "../../data/apiConfig";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import moment from "moment";
+import { useAuth } from "../../hooks/useAuth";
 
 const Activities = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -19,7 +21,7 @@ const Activities = () => {
 
   let fetchApplicationsTrend = () => {
     axios
-      .get(`${hostServer}/interview/all?user_id=1`)
+      .get(`${hostServer}/interview/all?user_id=1`, getAuthHeader(user))
       .then((response) => {
         setData({
           ...data,

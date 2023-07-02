@@ -3,11 +3,13 @@ import { Box, CircularProgress, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { hostServer } from "../data/apiConfig";
+import { hostServer, getAuthHeader } from "../data/apiConfig";
+import { useAuth } from "../hooks/useAuth";
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
 
   const [data, setData] = useState({
     loading: true,
@@ -17,7 +19,10 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
 
   let fetchApplicationsTrend = () => {
     axios
-      .get(`${hostServer}/reporting/application_trend?company_id=1&days=5`)
+      .get(
+        `${hostServer}/reporting/application_trend?company_id=1&days=5`,
+        getAuthHeader(user)
+      )
       .then((response) => {
         console.log("consolde", response.data.response);
         setData({
