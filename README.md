@@ -1,7 +1,15 @@
-# React Admin Dashboard
+# Dashboard
 
-Build a COMPLETE React Admin Dashboard App | React, Material UI, Data Grid, Light & Dark Mode
+Prerequisite:
+`node 18+`
 
-Video: https://www.youtube.com/watch?v=wYpCWwD1oz0
+Run these commands to run the frontend server:
 
-For all related questions and discussions about this project, check out the discord: https://discord.gg/2FfPeEk2mX
+1. Install the dependencies
+`npm install`
+
+2. Start the server
+`npm run start`
+
+3. Add the IP of the Backend server to `apiConfig.js` file as hostServer.
+
