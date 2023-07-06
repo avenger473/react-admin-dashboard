@@ -14,10 +14,6 @@ export const LongMenu = ({ resume_url, scorecard_url }) => {
       label: "View CV",
       action_cb: () => redirect(resume_url),
     },
-    {
-      label: "View Scorecard",
-      action_cb: () => redirect(scorecard_url),
-    },
     { label: "Edit", action_cb: () => console.log("Edit") },
     { label: "View Profile", action_cb: () => console.log("View Profile") },
   ];

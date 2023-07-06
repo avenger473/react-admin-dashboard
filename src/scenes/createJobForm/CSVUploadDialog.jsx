@@ -3,8 +3,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  TextField,
   DialogTitle,
+  TextField,
   Box,
   Typography,
   useTheme,
@@ -13,7 +13,7 @@ import {
 import { tokens } from "../../theme";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import axios from "axios";
-import { hostServer, getAuthHeader } from "../../data/apiConfig";
+import { hostServer } from "../../data/apiConfig";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 

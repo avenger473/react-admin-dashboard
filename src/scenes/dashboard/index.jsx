@@ -79,7 +79,7 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ marginBottom: "15px" }}
           >
-            My Interviews
+            Upcoming Interviews
           </Typography>
           <Box mt="24px">
             <Activities />

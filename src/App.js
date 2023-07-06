@@ -9,12 +9,13 @@ import CreateJobForm from "./scenes/createJobForm";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/settings/faq";
+import SignUp from "./scenes/signup";
 import Billing from "./scenes/settings/billing";
 import General from "./scenes/settings/general";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
-import Calendar from "./scenes/calendar/calendar";
+import Calendar from "./scenes/calendar";
 import Login from "./scenes/login";
 import { HomeLayout } from "./components/HomeLayout";
 import { ProtectedLayout } from "./components/ProtectedLayout";
@@ -34,11 +35,12 @@ function App() {
                 element={<Navigate to="/login" replace={true} />}
               />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
             </Route>
 
             <Route path="/dashboard" element={<ProtectedLayout />}>
               <Route path="" element={<Dashboard />} />
-              <Route path="candidates" element={<Candidates />} />
+              <Route path="applications" element={<Candidates />} />
               <Route path="reporting" element={<Reporting />} />
               <Route path="invoices" element={<Invoices />} />
               <Route path="create_job" element={<CreateJobForm />} />

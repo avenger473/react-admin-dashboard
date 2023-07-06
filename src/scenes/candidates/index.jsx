@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  useTheme,
+  Button,
+} from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
@@ -8,6 +14,8 @@ import axios from "axios";
 import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import moment from "moment";
 import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 
 const Candidates = () => {
   const theme = useTheme();
@@ -106,7 +114,29 @@ const Candidates = () => {
 
   return (
     <Box m="20px">
-      <Header title="MY CANDIDATES" subtitle="Managing the Team Members" />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header
+          title="JOB APPLICATIONS"
+          subtitle="Managing the Job Applications"
+        />
+
+        <Box>
+          <Link to={"/dashboard/create_job"}>
+            <Button
+              sx={{
+                backgroundColor: colors.greenAccent[600],
+                color: colors.grey[100],
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "10px 20px",
+              }}
+            >
+              <WorkOutlineOutlinedIcon sx={{ mr: "10px" }} />
+              Create Job Application
+            </Button>
+          </Link>
+        </Box>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -134,12 +164,16 @@ const Candidates = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
         }}
       >
         {data.candidates ? (
           <DataGrid
             rows={data.candidates}
             columns={columns}
+            components={{ Toolbar: GridToolbar }}
             rowsPerPageOptions={[5, 10, 25, 100]}
           />
         ) : (

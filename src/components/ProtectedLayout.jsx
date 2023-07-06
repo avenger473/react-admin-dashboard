@@ -6,7 +6,6 @@ import { useAuth } from "../hooks/useAuth";
 
 export const ProtectedLayout = () => {
   const { user } = useAuth();
-  const [isSidebar, setIsSidebar] = useState(true);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -14,9 +13,9 @@ export const ProtectedLayout = () => {
 
   return (
     <>
-      <Sidebar isSidebar={isSidebar} />
+      <Sidebar user={user} />
       <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
+        <Topbar />
         <Outlet />
       </main>
     </>

@@ -53,12 +53,39 @@ const LogoutMenuItem = () => {
   );
 };
 
-const Sidebar = () => {
+const ProfileIcon = ({ user_name }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  let initials = user_name
+    .trim()
+    .split(" ")
+    .map((e) => {
+      return e[0].toUpperCase();
+    })
+    .join("");
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="100px"
+      height="100px"
+      bgcolor={colors.blueAccent[700]}
+      borderRadius={"50%"}
+    >
+      <Typography variant="h1" color={colors.grey[100]} fontWeight={"700"}>
+        {initials}
+      </Typography>
+    </Box>
+  );
+};
+
+const Sidebar = ({ user }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-
+  console.log(user);
   return (
     <Box
       sx={{
@@ -98,7 +125,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  KODE
+                  {user.company_name}
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -110,13 +137,14 @@ const Sidebar = () => {
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                <img
+                {/* <img
                   alt="profile-user"
                   width="100px"
                   height="100px"
                   src={`../../assets/images.jpeg`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
+                /> */}
+                <ProfileIcon user_name={user.name} />
               </Box>
               <Box textAlign="center">
                 <Typography
@@ -125,10 +153,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ananya
+                  {user.name}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  HRBP
+                  {user.role === "ADMIN" ? "ADMIN" : ""}
                 </Typography>
               </Box>
             </Box>
@@ -143,8 +171,8 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Candidates"
-              to="/candidates"
+              title="Job Applications"
+              to="/applications"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

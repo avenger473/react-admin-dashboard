@@ -21,7 +21,7 @@ const Form = () => {
 
   let fetchUserProfile = () => {
     axios
-      .get(`${hostServer}/user/1`, getAuthHeader(user))
+      .get(`${hostServer}/user/${user.user_id}`, getAuthHeader(user))
       .then((response) => {
         setData({
           ...data,

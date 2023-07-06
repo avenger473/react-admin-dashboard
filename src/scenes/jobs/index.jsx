@@ -107,7 +107,7 @@ const Jobs = () => {
         <Header title="JOBS" subtitle="Create a New Job Profile" />
 
         <Box>
-          <Link to={"/create_job"}>
+          <Link to={"/dashboard/create_job"}>
             <Button
               sx={{
                 backgroundColor: colors.greenAccent[600],

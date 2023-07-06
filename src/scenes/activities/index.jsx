@@ -8,7 +8,7 @@ import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import moment from "moment";
 import { useAuth } from "../../hooks/useAuth";
 
-const Activities = () => {
+const UpcomingInterviews = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { user } = useAuth();
@@ -21,7 +21,10 @@ const Activities = () => {
 
   let fetchApplicationsTrend = () => {
     axios
-      .get(`${hostServer}/interview/all?user_id=1`, getAuthHeader(user))
+      .get(
+        `${hostServer}/interview/upcoming?user_id=${user.user_id}`,
+        getAuthHeader(user)
+      )
       .then((response) => {
         setData({
           ...data,
@@ -110,11 +113,6 @@ const Activities = () => {
         );
       },
     },
-    {
-      field: "comment",
-      headerName: "Comment",
-      flex: 1,
-    },
   ];
 
   return (
@@ -162,4 +160,4 @@ const Activities = () => {
   );
 };
 
-export default Activities;
+export default UpcomingInterviews;
