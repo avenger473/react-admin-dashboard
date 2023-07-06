@@ -1,10 +1,14 @@
-# React Admin Dashboard
+# Dashboard
 
-## Installation
+Prerequisite:
+`node 18+`
 
-1. Install Node 18
-2. `npm install`
+Run these commands to run the frontend server:
 
-## Starting Web Server
+1. Install the dependencies
+`npm install`
 
+2. Start the server
 `npm run start`
+
+3. Add the IP of the Backend server to `apiConfig.js` file as hostServer.
