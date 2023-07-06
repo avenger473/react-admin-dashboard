@@ -1,15 +1,60 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataApplicationReview } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "../../components/Header";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
+import { useAuth } from "../../hooks/useAuth";
 
 const ApplicationReview = () => {
   const theme = useTheme();
+  const { user } = useAuth();
   const colors = tokens(theme.palette.mode);
+
+  const [data, setData] = useState({
+    loading: true,
+    applications: null,
+    error: null,
+  });
+
+  let fetchApplications = () => {
+    axios
+      .get(
+        `${hostServer}/reporting/application_to_review?company_id=1`,
+        getAuthHeader(user)
+      )
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          applications: response.data.response.map((e, index) => {
+            return {
+              id: index,
+              position: e.position,
+              total_cv: e.totalCvReceived,
+              cv_screening: e.cvScreening,
+              chatbot_screening: e.chatbotScreening,
+              interview_screening: e.interviewScreening,
+              interviewed: e.interviewDone,
+              hired: e.hired,
+              rejected: e.rejected,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
   const columns = [
     {
       field: "position",
@@ -57,11 +102,18 @@ const ApplicationReview = () => {
         },
       }}
     >
-      <DataGrid
-        disableRowSelectionOnClick={true}
-        rows={mockDataApplicationReview}
-        columns={columns}
-      />
+      {data.applications ? (
+        <DataGrid
+          disableRowSelectionOnClick={true}
+          rows={data.applications}
+          columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
+        />
+      ) : (
+        <Box display={"flex"} justifyContent={"center"} mt="100px">
+          <CircularProgress color="secondary" />
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,14 +1,80 @@
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
-import { mockPieData as data } from "../data/mockData";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Box, CircularProgress } from "@mui/material";
+import { hostServer, getAuthHeader } from "../data/apiConfig";
+import { useAuth } from "../hooks/useAuth";
 
 const PieChart = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  return (
+  const { user } = useAuth();
+
+  const [data, setData] = useState({
+    loading: true,
+    candidates: null,
+    error: null,
+  });
+
+  let fetchCandidatesQuality = () => {
+    axios
+      .post(
+        `${hostServer}/reporting/candidate_quality`,
+        {
+          start_ts: 0,
+          end_ts: Date.now(),
+          company_id: 1, //TODO get company id
+        },
+        getAuthHeader(user)
+      )
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          candidates: [
+            {
+              id: "average",
+              label: "Average",
+              value: response.data.average_candidates,
+              color: tokens("dark").redAccent[500],
+            },
+            {
+              id: "poor",
+              label: "Poor",
+              value: response.data.poor_candidates,
+              color: tokens("dark").redAccent[500],
+            },
+            {
+              id: "good",
+              label: "Good",
+              value: response.data.good_candidates,
+              color: tokens("dark").redAccent[500],
+            },
+          ],
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchCandidatesQuality();
+  }, []);
+
+  return data.loading ? (
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <CircularProgress color="secondary" />
+    </Box>
+  ) : data.candidates ? (
     <ResponsivePie
-      data={data}
+      data={data.candidates}
       theme={{
         axis: {
           domain: {
@@ -37,11 +103,13 @@ const PieChart = () => {
           },
         },
       }}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+      colors={{ scheme: "nivo" }}
+      margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
       innerRadius={0.5}
       padAngle={0.7}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
+      isInteractive={false}
       borderColor={{
         from: "color",
         modifiers: [["darker", 0.2]],
@@ -50,59 +118,18 @@ const PieChart = () => {
       arcLinkLabelsTextColor={colors.grey[100]}
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: "color" }}
-      enableArcLabels={false}
+      enableArcLabels={true}
       arcLabelsRadiusOffset={0.4}
       arcLabelsSkipAngle={7}
       arcLabelsTextColor={{
         from: "color",
         modifiers: [["darker", 2]],
       }}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      legends={[
-        {
-          anchor: "bottom",
-          direction: "row",
-          justify: false,
-          translateX: 0,
-          translateY: 56,
-          itemsSpacing: 0,
-          itemWidth: 100,
-          itemHeight: 18,
-          itemTextColor: "#999",
-          itemDirection: "left-to-right",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
-            },
-          ],
-        },
-      ]}
     />
+  ) : (
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <div onClick={(_) => fetchCandidatesQuality()}>Retry</div>
+    </Box>
   );
 };
 

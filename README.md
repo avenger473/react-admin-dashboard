@@ -12,4 +12,3 @@ Run these commands to run the frontend server:
 `npm run start`
 
 3. Add the IP of the Backend server to `apiConfig.js` file as hostServer.
-

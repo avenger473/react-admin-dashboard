@@ -74,7 +74,12 @@ const Invoices = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataInvoices} columns={columns} />
+        <DataGrid
+          checkboxSelection
+          rows={mockDataInvoices}
+          columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
+        />
       </Box>
     </Box>
   );

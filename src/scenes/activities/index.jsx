@@ -1,115 +1,117 @@
-import * as React from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataInterviews } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "../../components/Header";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { LongMenu } from "./LongMenu";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hostServer, getAuthHeader } from "../../data/apiConfig";
+import moment from "moment";
+import { useAuth } from "../../hooks/useAuth";
 
-const options = [
-  "View CV",
-  "Download CV",
-  "View Scorecard",
-  "Download Scorecard",
-  "Edit",
-  "View Profile",
-];
-
-export function LongMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  return (
-    <div>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          "aria-labelledby": "long-button",
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: "25ch",
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === "Pyxis"}
-            onClick={handleClose}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-    </div>
-  );
-}
-
-const Activities = () => {
+const UpcomingInterviews = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { user } = useAuth();
+
+  const [data, setData] = useState({
+    loading: true,
+    interviews: null,
+    error: null,
+  });
+
+  let fetchApplicationsTrend = () => {
+    axios
+      .get(
+        `${hostServer}/interview/upcoming?user_id=${user.user_id}`,
+        getAuthHeader(user)
+      )
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          interviews: response.data.map((e, index) => {
+            return {
+              id: index,
+              name: e.candidate.name,
+              email: e.candidate.email,
+              interview_details: {
+                position: e.jobApplication.job.position,
+                date: moment(e.start_ts).format("DD-MM-YYYY"),
+                start_time: moment(e.start_ts).format("hh:mm:a"),
+                end_time: moment(e.end_ts).format("hh:mm:a"),
+              },
+              scorecard_url: null,
+              resume_url: e.candidate.link_to_cv,
+              comment: e.jobApplication.comments,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplicationsTrend();
+  }, []);
+
   const columns = [
     {
-      field: "tel",
+      field: "menu",
       headerName: "",
       flex: 0.2,
-      renderCell: () => {
-        return <LongMenu />;
+      renderCell: ({ row: { resume_url, scorecard_url } }) => {
+        return (
+          <LongMenu resume_url={resume_url} scorecard_url={scorecard_url} />
+        );
       },
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "applicant",
+      headerName: "Applicant",
       flex: 1,
-      cellClassName: "name-column--cell",
+      renderCell: ({ row: { name, email } }) => {
+        return (
+          <Box>
+            <Typography color={colors.grey[100]}>{name}</Typography>
+            <Typography color={colors.blueAccent[200]}>{email}</Typography>
+          </Box>
+        );
+      },
     },
     {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "location",
-      headerName: "Location",
+      field: "position",
+      headerName: "Position",
       flex: 1,
       renderCell: ({ row: { interview_details } }) => {
         return (
-          <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-            {interview_details.location}
+          <Typography color={colors.grey[100]}>
+            {interview_details.position}
           </Typography>
         );
       },
     },
     {
-      field: "comment",
-      headerName: "Comment",
+      field: "interviewSchedule",
+      headerName: "Interview Date & Time",
       flex: 1,
+      renderCell: ({ row: { interview_details } }) => {
+        return (
+          <Box>
+            <Typography color={colors.grey[100]}>
+              {interview_details.date}
+            </Typography>
+            <Typography color={colors.blueAccent[200]}>
+              {`${interview_details.start_time} - ${interview_details.end_time}`}
+            </Typography>
+          </Box>
+        );
+      },
     },
   ];
 
@@ -142,13 +144,20 @@ const Activities = () => {
         },
       }}
     >
-      <DataGrid
-        disableRowSelectionOnClick={true}
-        rows={mockDataInterviews}
-        columns={columns}
-      />
+      {data.interviews ? (
+        <DataGrid
+          disableRowSelectionOnClick={true}
+          rows={data.interviews}
+          columns={columns}
+          rowsPerPageOptions={[5, 10, 25, 100]}
+        />
+      ) : (
+        <Box display={"flex"} justifyContent={"center"} mt="100px">
+          <CircularProgress color="secondary" />
+        </Box>
+      )}
     </Box>
   );
 };
 
-export default Activities;
+export default UpcomingInterviews;

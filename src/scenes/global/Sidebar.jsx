@@ -4,20 +4,18 @@ import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import PaymentIcon from "@mui/icons-material/Payment";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../../hooks/useAuth";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -32,17 +30,62 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       icon={icon}
     >
       <Typography>{title}</Typography>
-      <Link to={to} />
+      <Link to={"/dashboard" + to} />
     </MenuItem>
   );
 };
 
-const Sidebar = () => {
+const LogoutMenuItem = () => {
+  const theme = useTheme();
+  const { logout } = useAuth();
+  const colors = tokens(theme.palette.mode);
+
+  return (
+    <MenuItem
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={logout}
+      icon={<LogoutIcon />}
+    >
+      <Typography>Logout</Typography>
+    </MenuItem>
+  );
+};
+
+const ProfileIcon = ({ user_name }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  let initials = user_name
+    .trim()
+    .split(" ")
+    .map((e) => {
+      return e[0].toUpperCase();
+    })
+    .join("");
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="100px"
+      height="100px"
+      bgcolor={colors.blueAccent[700]}
+      borderRadius={"50%"}
+    >
+      <Typography variant="h1" color={colors.grey[100]} fontWeight={"700"}>
+        {initials}
+      </Typography>
+    </Box>
+  );
+};
+
+const Sidebar = ({ user }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-
+  console.log(user);
   return (
     <Box
       sx={{
@@ -82,7 +125,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                  {user.company_name}
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -94,13 +137,14 @@ const Sidebar = () => {
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                <img
+                {/* <img
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/user.png`}
+                  src={`../../assets/images.jpeg`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
+                /> */}
+                <ProfileIcon user_name={user.name} />
               </Box>
               <Box textAlign="center">
                 <Typography
@@ -109,10 +153,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ed Roh
+                  {user.name}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {user.role === "ADMIN" ? "ADMIN" : ""}
                 </Typography>
               </Box>
             </Box>
@@ -127,8 +171,8 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Activities"
-              to="/team"
+              title="Job Applications"
+              to="/applications"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -141,66 +185,49 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Invoices"
-              to="/invoices"
-              icon={<WorkOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
               title="Reporting"
-              to="/contacts"
+              to="/reporting"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Create Job"
-              to="/form"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
+              title="Jobs"
+              to="/jobs"
+              icon={<WorkOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <SubMenu
-              label={<Typography>{"Charts"}</Typography>}
+              title={<Typography>Settings</Typography>}
               icon={<SettingsOutlinedIcon />}
+              style={{
+                color: colors.grey[100],
+              }}
             >
               <Item
-                title="Bar Chart"
-                to="/bar"
-                icon={<BarChartOutlinedIcon />}
+                title="General"
+                to="/general"
+                icon={<ManageAccountsIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
-                title="Pie Chart"
-                to="/pie"
-                icon={<PieChartOutlineOutlinedIcon />}
+                title="Billing"
+                to="/billing"
+                icon={<PaymentIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
-                title="Line Chart"
-                to="/line"
-                icon={<TimelineOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Geography Chart"
-                to="/geography"
-                icon={<MapOutlinedIcon />}
+                title="FAQ Page"
+                to="/faq"
+                icon={<HelpOutlineOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
             </SubMenu>
+            <LogoutMenuItem />
           </Box>
         </Menu>
       </ProSidebar>
