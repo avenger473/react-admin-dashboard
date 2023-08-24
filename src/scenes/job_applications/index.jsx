@@ -16,54 +16,68 @@ import moment from "moment";
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
-
-const Candidates = () => {
+import { ScheduleInterviewModal } from "./modals/ScheduleInterviewModal";
+import { UpdateJobApplicationModal } from "./modals/UpdateJobApplicationModal";
+import { mockDataCandidates } from "../../data/mockData";
+const JobApplication = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { user } = useAuth();
 
+  const [modalOpen, setModal] = useState(null);
+
+  const closeModal = () => {
+    setModal(null);
+  };
+
+  const toggleModal = (title, jobApplication) => {
+    setModal({ title: title, jobApplication: jobApplication });
+  };
+
   const [data, setData] = useState({
     loading: true,
-    candidates: null,
+    jobApplications: null,
     error: null,
   });
 
-  let fetchApplicationsTrend = () => {
-    axios
-      .get(
-        `${hostServer}/job/application/all?company_id=1`,
-        getAuthHeader(user)
-      )
-      .then((response) => {
-        setData({
-          ...data,
-          loading: false,
-          candidates: response.data.map((e, index) => {
-            return {
-              id: index,
-              name: e.candidate.name,
-              email: e.candidate.email,
-              position: e.job.position,
-              application_date: moment(e.created_at).format("DD-MM-YYYY"),
-              status: e.status,
-              scorecard_url: e.candidate.link_to_scorecard,
-              resume_url: e.candidate.link_to_cv,
-              comment: e.comments,
-            };
-          }),
-        });
-      })
-      .catch((error) => {
-        setData({
-          ...data,
-          loading: false,
-          error: error,
-        });
-      });
+  let fetchJobApplications = () => {
+    setData({ ...data, loading: false, jobApplications: mockDataCandidates });
+
+    // axios
+    //   .get(
+    //     `${hostServer}/job/application/all?company_id=1`,
+    //     getAuthHeader(user)
+    //   )
+    //   .then((response) => {
+    //     setData({
+    //       ...data,
+    //       loading: false,
+    //       jobApplications: response.data.map((e, index) => {
+    //         return {
+    //           id: index,
+    //           name: e.candidate.name,
+    //           email: e.candidate.email,
+    //           position: e.job.position,
+    //           application_date: moment(e.created_at).format("DD-MM-YYYY"),
+    //           status: e.status,
+    //           scorecard_url: e.candidate.link_to_scorecard,
+    //           resume_url: e.candidate.link_to_cv,
+    //           comment: e.comments,
+    //         };
+    //       }),
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setData({
+    //       ...data,
+    //       loading: false,
+    //       error: error,
+    //     });
+    //   });
   };
 
   useEffect(() => {
-    fetchApplicationsTrend();
+    fetchJobApplications();
   }, []);
 
   console.log(data);
@@ -73,8 +87,10 @@ const Candidates = () => {
       field: "menu",
       headerName: "",
       flex: 0.2,
-      renderCell: () => {
-        return <LongMenu />;
+      renderCell: ({ row: jobApplication }) => {
+        return (
+          <LongMenu jobApplication={jobApplication} toggleModal={toggleModal} />
+        );
       },
     },
     {
@@ -119,7 +135,20 @@ const Candidates = () => {
           title="JOB APPLICATIONS"
           subtitle="Managing the Job Applications"
         />
-
+        {modalOpen && (
+          <>
+            <ScheduleInterviewModal
+              openDialog={modalOpen.title === "ScheduleInterviewModal"}
+              jobApplication={modalOpen.jobApplication}
+              handleClose={closeModal}
+            />
+            <UpdateJobApplicationModal
+              openDialog={modalOpen.title === "UpdateJobApplicationModal"}
+              jobApplication={modalOpen.jobApplication}
+              handleClose={closeModal}
+            />
+          </>
+        )}
         <Box>
           <Link to={"/dashboard/create_job"}>
             <Button
@@ -169,9 +198,9 @@ const Candidates = () => {
           },
         }}
       >
-        {data.candidates ? (
+        {data.jobApplications ? (
           <DataGrid
-            rows={data.candidates}
+            rows={data.jobApplications}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             rowsPerPageOptions={[5, 10, 25, 100]}
@@ -186,4 +215,4 @@ const Candidates = () => {
   );
 };
 
-export default Candidates;
+export default JobApplication;
