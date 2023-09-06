@@ -1,15 +1,82 @@
 import { ResponsiveLine } from "@nivo/line";
-import { useTheme } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockLineData as data } from "../data/mockData";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hostServer } from "../data/apiConfig";
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  return (
+  const [data, setData] = useState({
+    loading: true,
+    trends: null,
+    error: null,
+  });
+
+  let fetchApplicationsTrend = () => {
+    axios
+      .get(`${hostServer}/reporting/application_trend?company_id=1&days=5`)
+      .then((response) => {
+        console.log("consolde", response.data.response);
+        setData({
+          ...data,
+          loading: false,
+          trends: [
+            {
+              id: "Rejected",
+              color: tokens("dark").redAccent[500],
+              data: response.data.response.map((e) => {
+                return {
+                  x: e.date,
+                  y: e.rejected,
+                };
+              }),
+            },
+            {
+              id: "Hired",
+              color: tokens("dark").greenAccent[500],
+              data: response.data.response.map((e) => {
+                return {
+                  x: e.date,
+                  y: e.selected,
+                };
+              }),
+            },
+            {
+              id: "CV Received",
+              color: tokens("dark").blueAccent[500],
+              data: response.data.response.map((e) => {
+                return {
+                  x: e.date,
+                  y: e.received,
+                };
+              }),
+            },
+          ],
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplicationsTrend();
+  }, []);
+
+  return data.loading ? (
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <CircularProgress color="secondary" />
+    </Box>
+  ) : data.trends ? (
     <ResponsiveLine
-      data={data}
+      data={data.trends}
       theme={{
         axis: {
           domain: {
@@ -43,7 +110,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           },
         },
       }}
-      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
+      colors={{ datum: "color" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
@@ -111,6 +178,10 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         },
       ]}
     />
+  ) : (
+    <Box display={"flex"} justifyContent={"center"} mt="100px">
+      <div onClick={(_) => fetchApplicationsTrend()}>Retry</div>
+    </Box>
   );
 };
 

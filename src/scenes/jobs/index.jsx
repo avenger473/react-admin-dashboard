@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { LongMenu } from "./LongMenu";
 import axios from "axios";
 import { hostServer } from "../../data/apiConfig";
-import moment from "moment";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 
-const Candidates = () => {
+const Jobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [data, setData] = useState({
     loading: true,
-    candidates: null,
+    jobs: null,
     error: null,
   });
 
-  let fetchApplicationsTrend = () => {
+  let fetchJobs = () => {
     axios
-      .get(`${hostServer}/job/application/all?company_id=1`)
+      .get(`${hostServer}/job/all/?company_code=Port1451`)
       .then((response) => {
         setData({
           ...data,
           loading: false,
-          candidates: response.data.map((e, index) => {
+          jobs: response.data.map((e, index) => {
             return {
+              ...e,
               id: index,
-              name: e.candidate.name,
-              email: e.candidate.email,
-              position: e.job.position,
-              application_date: moment(e.created_at).format("DD-MM-YYYY"),
-              status: e.status,
-              scorecard_url: e.candidate.link_to_scorecard,
-              resume_url: e.candidate.link_to_cv,
-              comment: e.comments,
             };
           }),
         });
@@ -50,7 +50,7 @@ const Candidates = () => {
   };
 
   useEffect(() => {
-    fetchApplicationsTrend();
+    fetchJobs();
   }, []);
 
   console.log(data);
@@ -65,43 +65,62 @@ const Candidates = () => {
       },
     },
     {
-      field: "applicant",
-      headerName: "Applicant",
+      field: "title",
+      headerName: "Title",
       flex: 1,
-      renderCell: ({ row: { name, email } }) => {
-        return (
-          <Box>
-            <Typography color={colors.grey[100]}>{name}</Typography>
-            <Typography color={colors.blueAccent[200]}>{email}</Typography>
-          </Box>
-        );
+      renderCell: ({ row: { title } }) => {
+        return <Typography color={colors.grey[100]}>{title}</Typography>;
       },
     },
     {
       field: "position",
       headerName: "Position",
+      flex: 1.5,
+    },
+    {
+      field: "location",
+      headerName: "Location",
       flex: 1,
     },
     {
-      field: "application_date",
-      headerName: "Application Date",
+      field: "yoe",
+      headerName: "Year of Experience",
+      flex: 0.75,
+    },
+    {
+      field: "education_level",
+      headerName: "Education Level",
       flex: 1,
     },
     {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-    },
-    {
-      field: "comment",
-      headerName: "Comment",
+      field: "field_of_education",
+      headerName: "Field Of Education",
       flex: 1,
     },
   ];
 
   return (
     <Box m="20px">
-      <Header title="MY CANDIDATES" subtitle="Managing the Team Members" />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="JOBS" subtitle="Create a New Job Profile" />
+
+        <Box>
+          <Link to={"/create_job"}>
+            <Button
+              sx={{
+                backgroundColor: colors.greenAccent[600],
+                color: colors.grey[100],
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "10px 20px",
+              }}
+            >
+              <WorkOutlineOutlinedIcon sx={{ mr: "10px" }} />
+              Create Job
+            </Button>
+          </Link>
+        </Box>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -129,22 +148,28 @@ const Candidates = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
         }}
       >
-        {data.candidates ? (
-          <DataGrid
-            rows={data.candidates}
-            columns={columns}
-            rowsPerPageOptions={[5, 10, 25, 100]}
-          />
-        ) : (
-          <Box display={"flex"} justifyContent={"center"} mt="100px">
+        {data.loading ? (
+          <Box display={"flex"} justifyContent={"center"} mt={"100px"}>
             <CircularProgress color="secondary" />
           </Box>
+        ) : data.jobs ? (
+          <DataGrid
+            rows={data.jobs}
+            columns={columns}
+            rowsPerPageOptions={[5, 10, 25, 100]}
+            components={{ Toolbar: GridToolbar }}
+          />
+        ) : (
+          <div>{data.error}</div>
         )}
       </Box>
     </Box>
   );
 };
 
-export default Candidates;
+export default Jobs;

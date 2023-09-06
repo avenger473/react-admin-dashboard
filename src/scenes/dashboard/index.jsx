@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
@@ -61,7 +61,6 @@ const Dashboard = () => {
             <Typography variant="h5" fontWeight="600">
               Average Candidate Quality
             </Typography>
-
             <Box height={"100%"}>
               <PieChart />
             </Box>

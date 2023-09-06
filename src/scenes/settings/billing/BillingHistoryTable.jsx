@@ -65,6 +65,7 @@ const BillingHistoryTable = () => {
         disableRowSelectionOnClick={true}
         rows={mockTransactions}
         columns={columns}
+        rowsPerPageOptions={[5, 10, 25, 100]}
       />
     </Box>
   );

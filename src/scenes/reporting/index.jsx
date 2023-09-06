@@ -1,13 +1,56 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataApplications } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hostServer } from "../../data/apiConfig";
 
-const Contacts = () => {
+const Reporting = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [data, setData] = useState({
+    loading: true,
+    applications: null,
+    error: null,
+  });
+
+  let fetchApplications = () => {
+    axios
+      .get(`${hostServer}/reporting/application_to_review?company_id=1`)
+      .then((response) => {
+        setData({
+          ...data,
+          loading: false,
+          applications: response.data.response.map((e, index) => {
+            return {
+              id: index,
+              position: e.position,
+              total_cv: e.totalCvReceived,
+              cv_screening: e.cvScreening,
+              chatbot_screening: e.chatbotScreening,
+              interview_screening: e.interviewScreening,
+              interviewed: e.interviewDone,
+              hired: e.hired,
+              rejected: e.rejected,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          loading: false,
+          error: error,
+        });
+      });
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
 
   const columns = [
     {
@@ -89,14 +132,21 @@ const Contacts = () => {
           },
         }}
       >
-        <DataGrid
-          rows={mockDataApplications}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-        />
+        {data.applications ? (
+          <DataGrid
+            rows={data.applications}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            rowsPerPageOptions={[5, 10, 25, 100]}
+          />
+        ) : (
+          <Box display={"flex"} justifyContent={"center"} mt="100px">
+            <CircularProgress color="secondary" />
+          </Box>
+        )}
       </Box>
     </Box>
   );
 };
 
-export default Contacts;
+export default Reporting;
