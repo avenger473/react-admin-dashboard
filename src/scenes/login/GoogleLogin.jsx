@@ -1,18 +1,15 @@
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { google_client_id } from "../../data/apiConfig";
+import { GoogleLogin } from "@react-oauth/google";
 
-export default function GoogleLoginCmp() {
+export default function GoogleLoginCmp({ handleSubmit }) {
   return (
-    <GoogleOAuthProvider clientId={google_client_id}>
-      <GoogleLogin
-        onSuccess={(credentialResponse) => {
-          console.log(credentialResponse);
-        }}
-        onError={() => {
-          console.log("Login Failed");
-        }}
-        size="large"
-      />
-    </GoogleOAuthProvider>
+    <GoogleLogin
+      onSuccess={(credentialResponse) => {
+        handleSubmit(credentialResponse.credential);
+      }}
+      onError={() => {
+        alert("Login Failed! Retry");
+      }}
+      size="large"
+    />
   );
 }

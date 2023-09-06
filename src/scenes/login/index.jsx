@@ -18,6 +18,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { hostServer, getAuthHeader } from "../../data/apiConfig";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
+import { google_client_id } from "../../data/apiConfig";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLoginCmp from "./GoogleLogin";
 
 const defaultTheme = createTheme();
 
@@ -26,30 +29,8 @@ export default function Login() {
   const colors = tokens(theme.palette.mode);
   const { login } = useAuth();
 
-  /* {
-    "userId": 4,
-    "name": "Akhil Tiwari",
-    "email": "akhil1998tiwari@gmail.com",
-    "password": "$2a$10$XcTELPdo20rW1pAW3lNBlOI2uroBSsMlH.leq8kCRWMZvMriH/Sva",
-    "roles": [
-        {
-            "id": 1,
-            "name": "ADMIN"
-        }
-    ],
-    "company": {
-        "companyId": 1,
-        "name": "Porter",
-        "overview": null,
-        "companyUrl": null,
-        "companyCode": "Port1451"
-    },
-    "country": "India",
-    "mobile": "8449689598",
-    "language": "English",
-    "company_id": 1
-} */
   const fetchUserProfile = (user_id, access_token) => {
+    console.log("fetchUserProfile called");
     axios
       .get(
         `${hostServer}/user/${user_id}`,
@@ -73,7 +54,7 @@ export default function Login() {
       .catch((error) => {});
   };
 
-  const handleSubmit = (event) => {
+  const handlePasswordLogin = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
@@ -89,76 +70,96 @@ export default function Login() {
       });
   };
 
+  const handleGoogleLogin = (id_token) => {
+    console.log("handleGoogleLogin called");
+    axios
+      .post(`${hostServer}/api/auth/google/login`, {
+        token: id_token,
+      })
+      .then((response) => {
+        console.log("called");
+        fetchUserProfile(response.data.id, response.data.accessToken);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+    <GoogleOAuthProvider clientId={google_client_id}>
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            // noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            {/* <FormControlLabel
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box>
+              <GoogleLoginCmp handleSubmit={handleGoogleLogin} />
+            </Box>
+            <Box
+              component="form"
+              onSubmit={handlePasswordLogin}
+              // noValidate
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                {/* <Link href="#" variant="body2" color={colors.grey[100]}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  {/* <Link href="#" variant="body2" color={colors.grey[100]}>
                 Forgot password?
               </Link> */}
+                </Grid>
+                <Grid item>
+                  <Link to="/signup">Don't have an account? Sign Up</Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link to="/signup">Don't have an account? Sign Up</Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./scenes/dashboard";
-import Candidates from "./scenes/candidates";
+import Candidates from "./scenes/job_applications";
 import Invoices from "./scenes/invoices";
 import Reporting from "./scenes/reporting";
 import Jobs from "./scenes/jobs";

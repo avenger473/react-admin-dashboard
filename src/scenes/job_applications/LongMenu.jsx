@@ -2,9 +2,25 @@ import { useState } from "react";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const options = ["View CV", "View Scorecard", "Edit", "View Profile"];
+const redirect = (url, target = "_blank") => window.open(url, target);
 
-export function LongMenu() {
+export function LongMenu({ jobApplication, toggleModal }) {
+  console.log(jobApplication);
+  const options = [
+    {
+      label: "View CV",
+      action_cb: () => redirect(jobApplication.resume_url),
+    },
+    {
+      label: "Edit",
+      action_cb: () => toggleModal("UpdateJobApplicationModal", jobApplication),
+    },
+    {
+      label: "Schedule Interview",
+      action_cb: () => toggleModal("ScheduleInterviewModal", jobApplication),
+    },
+  ];
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -13,7 +29,6 @@ export function LongMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <div>
       <IconButton
@@ -34,21 +49,17 @@ export function LongMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: "25ch",
-          },
-        }}
       >
         {options.map((option) => (
           <MenuItem
-            key={option}
+            key={option.label}
             onClick={(_) => {
-              console.log("clicked: ", option);
+              console.log("clicked: ", option.label);
+              option.action_cb();
               handleClose();
             }}
           >
-            {option}
+            {option.label}
           </MenuItem>
         ))}
       </Menu>
